@@ -107,7 +107,8 @@ enum MageSpells
     SPELL_MAGE_SPELL_COUNTERSPELL                = 2139,
     SPELL_MAGE_BLINK                             = 65793,
     SPELL_MAGE_GLYPH_OF_MOMENTUM                 = 56384,
-    SPELL_MAGE_MOMENTUM                          = 119415
+    SPELL_MAGE_MOMENTUM                          = 119415,
+    SPELL_MAGE_GLYPH_OF_INFERNO_BLAST            = 89926
 };
 
 // Flamestrike - 2120
@@ -1199,12 +1200,8 @@ class spell_mage_inferno_blast : public SpellScriptLoader
                         target->GetAttackableUnitListInRange(targetList, 10.0f);
 
                         targetList.remove_if(CheckInfernoBlastImpactPredicate(_player, target));
-
-                        int32 targets = 3;
-
-                        // Glyph of inferno blast
-                        if (_player->HasAura(89926))
-                            targets = 4;
+                        
+                        uint32 targets = _player->HasAura(SPELL_MAGE_GLYPH_OF_INFERNO_BLAST) ? 4 : 3;
 
                         if (targetList.size() > targets)
                             WoWSource::Containers::RandomResizeList(targetList, targets);
@@ -1494,7 +1491,7 @@ class spell_mage_alter_time : public SpellScriptLoader
                     for (std::list<Creature*>::const_iterator itr = mirrorList.begin(); itr != mirrorList.end(); ++itr)
                         if (Creature* pMirror = (*itr)->ToCreature())
                             if (TempSummon* pastSelf = pMirror->ToTempSummon())
-                                if (pastSelf->isAlive() && pastSelf->IsInWorld())
+                                if (pastSelf->IsAlive() && pastSelf->IsInWorld())
                                     if (pastSelf->GetSummoner() && pastSelf->GetSummoner()->GetGUID() == _player->GetGUID())
                                         pastSelf->AI()->DoAction(1);
                     // Hackfix to prevent usebug

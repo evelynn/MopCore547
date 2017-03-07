@@ -21,6 +21,7 @@
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
+#include "ScriptedGossip.h"
 #include "CreatureTextMgr.h"
 #include "InstanceScript.h"
 #include "SpellInfo.h"
@@ -669,7 +670,7 @@ class boss_commander_vojak : public CreatureScript
 
             void MovementInform(uint32 type, uint32 id)
             {
-                if (!me->isAlive() || type != POINT_MOTION_TYPE)
+                if (!me->IsAlive() || type != POINT_MOTION_TYPE)
                     return;
 
                 // Handle Stair movement / Phase 2 entrance.
@@ -845,7 +846,7 @@ class npc_sikthik_amberwing : public CreatureScript
 
             void MovementInform(uint32 type, uint32 id)
             {
-                if (!me->isAlive() || type != POINT_MOTION_TYPE)
+                if (!me->IsAlive() || type != POINT_MOTION_TYPE)
                     return;
 
                 // Handle Bombard movement and cast.
@@ -963,7 +964,7 @@ class npc_sikthik_add_vojak : public CreatureScript
 
             void MovementInform(uint32 type, uint32 id)
             {
-                if (!me->isAlive() || type != POINT_MOTION_TYPE)
+                if (!me->IsAlive() || type != POINT_MOTION_TYPE)
                     return;
 
                 // Handle Stair movement / Phase 2 entrance.
@@ -1475,7 +1476,7 @@ class npc_yang_ironclaw : public CreatureScript
 
             void MovementInform(uint32 type, uint32 id)
             {
-                if (!me->isAlive() || type != POINT_MOTION_TYPE)
+                if (!me->IsAlive() || type != POINT_MOTION_TYPE)
                     return;
 
                 switch(id)
@@ -1615,7 +1616,7 @@ class npc_li_chu : public CreatureScript
 
             void MovementInform(uint32 type, uint32 id)
             {
-                if (!me->isAlive() || type != POINT_MOTION_TYPE)
+                if (!me->IsAlive() || type != POINT_MOTION_TYPE)
                     return;
 
                 // Handle Mantid Tar Keg pickup / drop.
@@ -1791,7 +1792,7 @@ class npc_lo_chu : public CreatureScript
 
             void MovementInform(uint32 type, uint32 id)
             {
-                if (!me->isAlive() || type != POINT_MOTION_TYPE)
+                if (!me->IsAlive() || type != POINT_MOTION_TYPE)
                     return;
 
                 // Handle Mantid Tar Keg pickup / drop.

@@ -16,11 +16,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "icecrown_citadel.h"
+#include "ScriptMgr.h"
+#include "ScriptedCreature.h"
+#include "ScriptedGossip.h"
+#include "GridNotifiers.h"
 #include "MapManager.h"
 #include "Transport.h"
 #include "Vehicle.h"
 #include "Group.h"
+#include "icecrown_citadel.h"
 
 enum Achievements
 {
@@ -467,7 +471,7 @@ void TeleportPlayers(Map* map, uint64 teamInInstance)
     {
         if (Player* player = itr->getSource())
         {
-            if (player->isDead() && !player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
+            if (player->IsDead() && !player->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
                 player->ResurrectPlayer(1.0f);
 
             player->TeleportTo(631, -437.498505f, teamInInstance == ALLIANCE ? 2425.954f : 1997.954f, 192.997f, 2.247f);
@@ -497,7 +501,7 @@ bool DoWipeCheck(Transport* ship)
         Player* plr = *itr;
         ++itr;
 
-        if (plr && plr->isAlive())
+        if (plr && plr->IsAlive())
             return true;
     }
     return false;

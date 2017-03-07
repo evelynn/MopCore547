@@ -16,10 +16,12 @@
  */
 
 #include "ScriptMgr.h"
+#include "ScriptedCreature.h"
 #include "SpellScript.h"
 #include "ulduar.h"
 #include "Unit.h"
 #include "Vehicle.h"
+#include "GridNotifiers.h"
 
 #include <limits>
 #include <map>
@@ -320,7 +322,7 @@ class boss_mimiron : public CreatureScript
 
                 for (uint8 data = DATA_LEVIATHAN_MK_II; data <= DATA_AERIAL_UNIT; ++data)
                     if (Creature* creature = ObjectAccessor::GetCreature(*me, instance->GetData64(data)))
-                        if (creature->isAlive())
+                        if (creature->IsAlive())
                         {
                             creature->ExitVehicle();
                             creature->AI()->EnterEvadeMode();
@@ -1095,7 +1097,7 @@ class boss_leviathan_mk_turret : public CreatureScript
                     {
                         if (Player* player = itr->getSource())
                         {
-                            if (player->isDead() || player->isGameMaster())
+                            if (player->IsDead() || player->isGameMaster())
                                 continue;
 
                             float Distance = player->GetDistance(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());

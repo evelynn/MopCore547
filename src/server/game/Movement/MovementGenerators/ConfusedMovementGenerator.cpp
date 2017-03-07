@@ -24,6 +24,11 @@
 #include "MoveSpline.h"
 #include "Player.h"
 
+#include "ObjectAccessor.h"
+#include "ObjectDefines.h"
+#include "SharedDefines.h"
+#include "ObjectMgr.h"
+
 #ifdef MAP_BASED_RAND_GEN
 #define rand_norm() owner.rand_norm()
 #define urand(a, b) owner.urand(a, b)
@@ -37,7 +42,7 @@ void ConfusedMovementGenerator<T>::DoInitialize(T* owner)
     if (!owner)
         return;
 
-    if (!owner->isAlive())
+    if (!owner->IsAlive())
         return;
 
     float min_wander_distance = 2.0f;
@@ -117,7 +122,7 @@ void ConfusedMovementGenerator<T>::DoReset(T* owner)
     if (!owner)
         return;
 
-    if (!owner->isAlive())
+    if (!owner->IsAlive())
         return;
 
     if (!owner->IsStopped())
@@ -132,7 +137,7 @@ bool ConfusedMovementGenerator<T>::DoUpdate(T* owner, uint32 diff)
     if (!owner)
         return false;
 
-    if (!owner->isAlive())
+    if (!owner->IsAlive())
         return false;
 
     if (owner->HasUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED | UNIT_STATE_DISTRACTED))

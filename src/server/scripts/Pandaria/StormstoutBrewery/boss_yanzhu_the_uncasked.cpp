@@ -27,6 +27,7 @@
 #include "SpellAuraEffects.h"
 #include "Player.h"
 #include "MoveSplineInit.h"
+#include "PassiveAI.h"
 
 #include "stormstout_brewery.h"
 
@@ -350,7 +351,7 @@ class npc_uncle_gao : public CreatureScript
 
             void InitializeAI()
             {
-                if (!me->isDead())
+                if (!me->IsDead())
                     Reset();
             }
 

@@ -17,6 +17,8 @@
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
+#include "GridNotifiers.h"
+#include "SpellScript.h"
 #include "ulduar.h"
 #include <limits>
 
@@ -794,7 +796,7 @@ class boss_thorim : public CreatureScript
                 {
                     Creature* colossus = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_RUNIC_COLOSSUS));
                     Creature* giant = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_RUNE_GIANT));
-                    if (colossus && colossus->isDead() && giant && giant->isDead() && me->IsWithinDistInMap(attacker, 50.0f) && attacker->ToPlayer())
+                    if (colossus && colossus->IsDead() && giant && giant->IsDead() && me->IsWithinDistInMap(attacker, 50.0f) && attacker->ToPlayer())
                     {
                         Talk(SAY_JUMPDOWN);
                         phase = PHASE_ARENA;

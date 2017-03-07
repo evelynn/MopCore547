@@ -1694,9 +1694,9 @@ class Unit : public WorldObject
         
         void BuildHeartBeatMsg(WorldPacket* data) const;
 
-        bool isAlive() const { return (m_deathState == ALIVE); };
-        bool isDying() const { return (m_deathState == JUST_DIED); };
-        bool isDead() const { return (m_deathState == DEAD || m_deathState == CORPSE); };
+        bool IsAlive() const { return (m_deathState == ALIVE); };
+        bool IsDying() const { return (m_deathState == JUST_DIED); };
+        bool IsDead() const { return (m_deathState == DEAD || m_deathState == CORPSE); };
         DeathState getDeathState() { return m_deathState; };
         virtual void setDeathState(DeathState s);           // overwrited in Creature/Player/Pet
 
@@ -2189,6 +2189,7 @@ class Unit : public WorldObject
         float GetPositionZMinusOffset() const;
 
         void SetControlled(bool apply, UnitState state);
+        void DisableRotate(bool apply);
         void SendLossOfControl(AuraApplication const* aurApp, Mechanics mechanic, SpellEffIndex index);
 
         void AddComboPointHolder(uint32 lowguid) { m_ComboPointHolders.insert(lowguid); }

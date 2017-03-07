@@ -512,7 +512,7 @@ class spell_ignis_slag_pot : public SpellScriptLoader
 
             void OnRemove(constAuraEffectPtr /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (GetTarget()->isAlive())
+                if (GetTarget()->IsAlive())
                     GetTarget()->CastSpell(GetTarget(), SPELL_SLAG_IMBUED, true);
             }
 
@@ -526,6 +526,40 @@ class spell_ignis_slag_pot : public SpellScriptLoader
         AuraScript* GetAuraScript() const
         {
             return new spell_ignis_slag_pot_AuraScript();
+        }
+};
+
+class spell_ignis_activate_construct : public SpellScriptLoader
+{
+    public:
+        spell_ignis_activate_construct() : SpellScriptLoader("spell_ignis_activate_construct") { }
+
+        class spell_ignis_activate_construct_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_ignis_activate_construct_SpellScript);
+
+            void HandleScript(SpellEffIndex /*effIndex*/)
+            {
+                if (Creature* creature = GetHitCreature())
+                {
+                    creature->setFaction(GetCaster()->getFaction());
+                    creature->SetReactState(REACT_AGGRESSIVE);
+                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_STUNNED | UNIT_FLAG_DISABLE_MOVE);
+                    creature->AddThreat(GetCaster()->getVictim(), float(GetEffectValue()));
+                    creature->AI()->AttackStart(GetCaster()->getVictim());
+                    creature->AI()->DoZoneInCombat();
+                }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_ignis_activate_construct_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_ignis_activate_construct_SpellScript();
         }
 };
 
@@ -550,7 +584,7 @@ class achievement_ignis_hot_pocket : public AchievementCriteriaScript
 
         bool OnCheck(Player* source, Unit* /*target*/)
         {
-            return (source && source->isAlive());
+            return (source && source->IsAlive());
         }
 };
 
@@ -560,6 +594,7 @@ void AddSC_boss_ignis()
     new npc_iron_construct();
     new npc_scorch_ground();
     new spell_ignis_slag_pot();
+    new spell_ignis_activate_construct();
     new achievement_ignis_shattered();
     new achievement_ignis_hot_pocket();
 

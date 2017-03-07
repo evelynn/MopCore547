@@ -49,13 +49,13 @@ enum Spells
     SPELL_TWILIGHT_METEORITE_MARK    = 88518,
     SPELL_DEEP_BREATH                = 86059,
     SPELL_TWILIGHT_FLAMES_TRIGGER    = 86194,
-    SPELL_TWILIGHT_FLAME_DMG_1        = 86199, //бьет по обычному миру
-    SPELL_TWILIGHT_FLAME_DMG_25_1    = 92868, //бьет по обычному миру
-    SPELL_TWILIGHT_FLAME_DMG_10H_1    = 92869, //бьет по обычному миру
-    SPELL_TWILIGHT_FLAME_DMG_25H_1    = 92870, //бьет по обычному миру
-    SPELL_TWILIGHT_FLAME_DMG_2        = 86228, //бьет по сумеречному миру
-    SPELL_TWILIGHT_FLAME_DMG_25_2    = 92867, //бьет по сумеречному миру
-    SPELL_COSMETIC_TWILIGHT_BREATH    = 78954, //возможно неверный
+    SPELL_TWILIGHT_FLAME_DMG_1        = 86199, //ГЎГјГҐГІ ГЇГ® Г®ГЎГ»Г·Г­Г®Г¬Гі Г¬ГЁГ°Гі
+    SPELL_TWILIGHT_FLAME_DMG_25_1    = 92868, //ГЎГјГҐГІ ГЇГ® Г®ГЎГ»Г·Г­Г®Г¬Гі Г¬ГЁГ°Гі
+    SPELL_TWILIGHT_FLAME_DMG_10H_1    = 92869, //ГЎГјГҐГІ ГЇГ® Г®ГЎГ»Г·Г­Г®Г¬Гі Г¬ГЁГ°Гі
+    SPELL_TWILIGHT_FLAME_DMG_25H_1    = 92870, //ГЎГјГҐГІ ГЇГ® Г®ГЎГ»Г·Г­Г®Г¬Гі Г¬ГЁГ°Гі
+    SPELL_TWILIGHT_FLAME_DMG_2        = 86228, //ГЎГјГҐГІ ГЇГ® Г±ГіГ¬ГҐГ°ГҐГ·Г­Г®Г¬Гі Г¬ГЁГ°Гі
+    SPELL_TWILIGHT_FLAME_DMG_25_2    = 92867, //ГЎГјГҐГІ ГЇГ® Г±ГіГ¬ГҐГ°ГҐГ·Г­Г®Г¬Гі Г¬ГЁГ°Гі
+    SPELL_COSMETIC_TWILIGHT_BREATH    = 78954, //ГўГ®Г§Г¬Г®Г¦Г­Г® Г­ГҐГўГҐГ°Г­Г»Г©
 
     //theralion
     SPELL_ENGULFING_MAGIC                            = 86607,
@@ -100,14 +100,14 @@ enum Spells
 
     //twilight ream & mobs spells
     SPELL_TWILIGHT_PROTECTION_BUFF                    = 86415,
-    SPELL_TWILIGHT_SHIFT_AURA_1                        = 86202, //от глубокого дыхания
-    SPELL_TWILIGHT_SHIFT_AURA_25_1                    = 92889, //от глубокого дыхания
-    SPELL_TWILIGHT_SHIFT_AURA_10H_1                    = 92890, //от глубокого дыхания
-    SPELL_TWILIGHT_SHIFT_AURA_25H_1                    = 92891, //от глубокого дыхания
-    SPELL_TWILIGHT_SHIFT_AURA_2                        = 88436, //от разрушения
-    SPELL_TWILIGHT_SHIFT_AURA_25_2                    = 92892, //от разрушения
-    SPELL_TWILIGHT_SHIFT_AURA_10H_2                    = 92893, //от разрушения
-    SPELL_TWILIGHT_SHIFT_AURA_25H_2                    = 92894, //от разрушения
+    SPELL_TWILIGHT_SHIFT_AURA_1                        = 86202, //Г®ГІ ГЈГ«ГіГЎГ®ГЄГ®ГЈГ® Г¤Г»ГµГ Г­ГЁГї
+    SPELL_TWILIGHT_SHIFT_AURA_25_1                    = 92889, //Г®ГІ ГЈГ«ГіГЎГ®ГЄГ®ГЈГ® Г¤Г»ГµГ Г­ГЁГї
+    SPELL_TWILIGHT_SHIFT_AURA_10H_1                    = 92890, //Г®ГІ ГЈГ«ГіГЎГ®ГЄГ®ГЈГ® Г¤Г»ГµГ Г­ГЁГї
+    SPELL_TWILIGHT_SHIFT_AURA_25H_1                    = 92891, //Г®ГІ ГЈГ«ГіГЎГ®ГЄГ®ГЈГ® Г¤Г»ГµГ Г­ГЁГї
+    SPELL_TWILIGHT_SHIFT_AURA_2                        = 88436, //Г®ГІ Г°Г Г§Г°ГіГёГҐГ­ГЁГї
+    SPELL_TWILIGHT_SHIFT_AURA_25_2                    = 92892, //Г®ГІ Г°Г Г§Г°ГіГёГҐГ­ГЁГї
+    SPELL_TWILIGHT_SHIFT_AURA_10H_2                    = 92893, //Г®ГІ Г°Г Г§Г°ГіГёГҐГ­ГЁГї
+    SPELL_TWILIGHT_SHIFT_AURA_25H_2                    = 92894, //Г®ГІ Г°Г Г§Г°ГіГёГҐГ­ГЁГї
     SPELL_COLLAPSING_TWILIGHT_PORTAL_VISUAL            = 86291,
     SPELL_UNSTABLE_TWILIGHT_VISUAL                    = 86302,
     SPELL_UNSTABLE_TWILIGHT_DMG                        = 86305,
@@ -363,7 +363,7 @@ class boss_theralion : public CreatureScript
             {
                 if (!instance || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != sObjectMgr->GetScriptId(BTScriptName))
                     me->IsAIEnabled = false;
-                else if (!me->isDead())
+                else if (!me->IsDead())
                     Reset();
             }
 
@@ -392,7 +392,7 @@ class boss_theralion : public CreatureScript
 
             void DamageTaken(Unit* attacker, uint32& damage)
             {
-                if (!me || !me->isAlive())
+                if (!me || !me->IsAlive())
                     return;
                 if (attacker->GetGUID() == me->GetGUID())
                     return;
@@ -670,7 +670,7 @@ class boss_valiona : public CreatureScript
             {
                 if (!instance || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != sObjectMgr->GetScriptId(BTScriptName))
                     me->IsAIEnabled = false;
-                else if (!me->isDead())
+                else if (!me->IsDead())
                     Reset();
             }
 
@@ -678,7 +678,7 @@ class boss_valiona : public CreatureScript
             {
                 _Reset();
 
-                //правки общих спеллов тоже тут
+                //ГЇГ°Г ГўГЄГЁ Г®ГЎГ№ГЁГµ Г±ГЇГҐГ«Г«Г®Гў ГІГ®Г¦ГҐ ГІГіГІ
 
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_PROTECTION_BUFF);
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_SHIFT_AURA_1);
@@ -706,7 +706,7 @@ class boss_valiona : public CreatureScript
 
             void DamageTaken(Unit* attacker, uint32& damage)
             {
-                if (!me || !me->isAlive())
+                if (!me || !me->IsAlive())
                     return;
                 if (attacker->GetGUID() == me->GetGUID())
                     return;
@@ -1603,6 +1603,43 @@ class spell_shifting_reality : public SpellScriptLoader
         }
 };
 
+// 86622 - Engulfing Magic.
+/* class spell_theralion_engulfing_magic : public SpellScriptLoader
+{
+    public:
+        spell_theralion_engulfing_magic() : SpellScriptLoader("spell_theralion_engulfing_magic") { }
+
+        class spell_theralion_engulfing_magic_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_theralion_engulfing_magic_AuraScript);
+
+            void OnProc(const AuraEffect* aurEff, ProcEventInfo& eventInfo)
+            {
+                Unit* caster = GetCaster();
+                int32 engulfingmagicdmg = int32(CalculatePct(eventInfo.GetDamageInfo()->GetDamage(), aurEff->GetAmount()));
+                caster->CastCustomSpell(SPELL_ENGULFING_MAGIC_DMG, SPELLVALUE_BASE_POINT0, engulfingmagic, caster, true, NULL, aurEff);
+            }
+
+            void OnProc(const AuraEffect* aurEff, ProcEventInfo& eventInfo)
+            {
+                Unit* caster = GetCaster();
+                int32 engulfingmagicheal = int32(CalculatePct(eventInfo.GetHealInfo()->GetHeal(), aurEff->GetAmount()));
+                caster->CastCustomSpell(SPELL_ENGULFING_MAGIC_DMG, SPELLVALUE_BASE_POINT0, engulfingmagicheal, caster, true, NULL, aurEff);
+            }
+            
+            void Register()
+            {
+                OnEffectProc += AuraEffectProcFn(spell_theralion_engulfing_magic_AuraScript::OnProc, EFFECT_0, SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
+                OnEffectProc += AuraEffectProcFn(spell_theralion_engulfing_magic_AuraScript::OnProc, EFFECT_1, SPELL_AURA_MOD_HEALING_DONE_PERCENT);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_theralion_engulfing_magic_AuraScript();
+        }
+}; */
+
 void AddSC_boss_theralion_and_valiona()
 {
     new boss_theralion();
@@ -1624,4 +1661,5 @@ void AddSC_boss_theralion_and_valiona()
     new spell_valiona_devouring_flames_dmg();
     new spell_twilight_shift_stack();
     new spell_shifting_reality();
+    //new spell_theralion_engulfing_magic();
 }

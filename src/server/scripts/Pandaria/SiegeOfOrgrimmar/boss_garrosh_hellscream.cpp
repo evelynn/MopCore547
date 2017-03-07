@@ -4,10 +4,13 @@ Normal: 85%
 Heroic: 70%
 */
 
-#include "siege_of_orgrimmar.h"   
+#include "ScriptMgr.h"
+#include "ScriptedCreature.h"
+#include "GridNotifiers.h"
 #include "AreaTrigger.h"
 #include "Player.h"
 #include "Pet.h"
+#include "siege_of_orgrimmar.h"   
 
 // Current estimated progress: 70%
 enum Spells
@@ -433,7 +436,7 @@ static void AttackStop(uint32 entry, WorldObject* object)
 
     for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); ++iter)
     {
-        if ((*iter)->isAlive() && (*iter)->isInCombat())
+        if ((*iter)->IsAlive() && (*iter)->isInCombat())
         {
             (*iter)->AttackStop();
             (*iter)->CombatStop();
@@ -448,7 +451,7 @@ public:
 
     bool operator()(Unit* u)
     {
-        if (u->isAlive() && u->isInCombat() && !i_obj->IsHostileTo(u) && i_obj->IsWithinDistInMap(u, i_range) && u->GetMaxHealth() - u->GetHealth() > i_hp && u->GetTypeId() != TYPEID_PLAYER && u->GetEntry() != BOSS_GARROSH_HELLSCREAM)
+        if (u->IsAlive() && u->isInCombat() && !i_obj->IsHostileTo(u) && i_obj->IsWithinDistInMap(u, i_range) && u->GetMaxHealth() - u->GetHealth() > i_hp && u->GetTypeId() != TYPEID_PLAYER && u->GetEntry() != BOSS_GARROSH_HELLSCREAM)
         {
             i_hp = u->GetMaxHealth() - u->GetHealth();
             return true;
