@@ -2169,7 +2169,7 @@ void World::SetInitialWorldSettings()
 
     sLog->outInfo(LOG_FILTER_GENERAL, "Loading realm name...");
 
-    m_realmName = "WoWSource v4 Mop";
+    m_realmName = "MoPCore v4 Mop";
     QueryResult realmResult = LoginDatabase.PQuery("SELECT name FROM realmlist WHERE id = %u", realmID);
     if (realmResult)
         m_realmName = (*realmResult)[0].GetString();
@@ -2567,7 +2567,7 @@ void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, uint32 
     }
 }
 
-namespace WoWSource
+namespace MoPCore
 {
     class WorldWorldTextBuilder
     {
@@ -2614,7 +2614,7 @@ namespace WoWSource
             int32 i_textId;
             va_list* i_args;
     };
-}                                                           // namespace WoWSource
+}                                                           // namespace MoPCore
 
 /// Send a System Message to all players (except self if mentioned)
 void World::SendWorldText(int32 string_id, ...)
@@ -2622,8 +2622,8 @@ void World::SendWorldText(int32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    WoWSource::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    WoWSource::LocalizedPacketListDo<WoWSource::WorldWorldTextBuilder> wt_do(wt_builder);
+    MoPCore::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    MoPCore::LocalizedPacketListDo<MoPCore::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -2641,8 +2641,8 @@ void World::SendGMText(int32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    WoWSource::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    WoWSource::LocalizedPacketListDo<WoWSource::WorldWorldTextBuilder> wt_do(wt_builder);
+    MoPCore::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    MoPCore::LocalizedPacketListDo<MoPCore::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -3133,7 +3133,7 @@ void World::SendAutoBroadcast()
 
     std::string msg;
 
-    msg = WoWSource::Containers::SelectRandomContainerElement(m_Autobroadcasts);
+    msg = MoPCore::Containers::SelectRandomContainerElement(m_Autobroadcasts);
 
     uint32 abcenter = sWorld->getIntConfig(CONFIG_AUTOBROADCAST_CENTER);
 

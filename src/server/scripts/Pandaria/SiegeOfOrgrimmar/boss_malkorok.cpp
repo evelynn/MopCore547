@@ -2,70 +2,88 @@
 #include "ScriptedCreature.h"
 #include "siege_of_orgrimmar.h"
 
-enum eSpells
+enum Spells
 {
-	SPELL_ANCIENT_MIASMA     = 142861,
-	SPELL_ARCING_SMASH       = 142815,
-	SPELL_SEISMIC_SLAM       = 142849,
-	SPELL_DISPLACED_ENERGY   = 142913,
-	SPELL_EXPEL_MIASMA       = 143199,
-	SPELL_BREATH_OF_YSHAARJ  = 142842,
-	SPELL_ERADICATE          = 143916,
-	SPELL_BLOOD_RAGE         = 142879,
-	SPELL_IMPLODING_ENERGY   = 142986,
-	SPELL_FATAL_STRIKE       = 142990,
-	SPELL_RELENTLESS_ASSAULT = 143261,
-	SPELL_BREATH_DAMAGE      = 142816,
-	SPELL_DISPLACED_ENERGY_D = 142928,
-	SPELL_BLOOD_RAGE_DAMAGE  = 142890,
-	SPELL_ANCIENT_BARRIER_L  = 142864,
-	SPELL_ANCIENT_BARRIER_M  = 142865,
-	SPELL_ANCIENT_BARRIER_H  = 142866,
-	SPELL_ANCIENT_MIASMA_VIS = 143018,
-	SPELL_ANCIENT_MIASMA_DMG = 142906,
+    SPELL_ANCIENT_MIASMA         = 142861,
+    SPELL_ARCING_SMASH_DMG       = 142815,
+    SPELL_ARCING_SMASH_JUMP      = 142898,
+    SPELL_ARCING_SMASH_CHANNEL   = 143805,
+
+    SPELL_SEISMIC_SLAM           = 142851,
+    SPELL_SEISMIC_SLAM_DMG       = 142849,
+
+    SPELL_IMPLODING_ENERGY       = 142980,
+    SPELL_IMPLODING_ENERGY_AOE   = 142988,
+    SPELL_IMPLODING_ENERGY_AURA  = 144069,
+    SPELL_IMPLODING_ENERGY_DMG   = 142986,
+    SPELL_IMPLODING_ENERGY_DMG_2 = 142987, // if nobody was hit by first dmg spell
+
+    SPELL_BREATH_OF_YSHAARJ      = 142842,
+    SPELL_BREATH_DAMAGE          = 142816,
+
+    SPELL_FATAL_STRIKES          = 146254,
+    SPELL_RELENTLESS_ASSAULT     = 143261,
+
+    SPELL_ANCIENT_BARRIER_L      = 142864,
+    SPELL_ANCIENT_BARRIER_M      = 142865,
+    SPELL_ANCIENT_BARRIER_H      = 142866,
+    SPELL_ANCIENT_MIASMA_VIS     = 143018,
+    SPELL_ANCIENT_MIASMA_DMG     = 142906,
+
+    SPELL_BLOOD_RAGE             = 142879,
+    SPELL_BLOOD_RAGE_DMG         = 142890,
 };
 
-enum eEvents
+enum Events
 {
-	EVENT_ARCING_SMASH_FIRST   = 1,
-	EVENT_ARCING_SMASH_SECOND  = 2,
-	EVENT_ARCING_SMASH_THIRD   = 3,
-	EVENT_ARCING_SMASH_ROOT	   = 4,
-	EVENT_DESPAWN_ARCING_SMASH = 5,
-	EVENT_SEISMIC_SLAM         = 6,
-	EVENT_DISPLACED_ENERGY     = 7,
-	EVENT_ERADICATE            = 8,
-	EVENT_BREATH_OF_YSHARRJ    = 9,
-	EVENT_EXPEL_MIASMA         = 10,
-	EVENT_AGRESSIVE            = 11,
-	EVENT_BLOOD_RAGE           = 12,
-	EVENT_PHASE_ONE            = 13,
-	EVENT_IMPLODING_ENERGY     = 14,
-	EVENT_PHASE_TWO            = 15,
+    EVENT_ARCING_SMASH_FIRST   = 1,
+    EVENT_ARCING_SMASH         = 2,
+    EVENT_SEISMIC_SLAM         = 3,
+    EVENT_BREATH_OF_YSHARRJ    = 4,
+    EVENT_IMPLODING_ENERGY     = 5,
+    EVENT_REGENERATE_POWER     = 6,
+    EVENT_PHASE_ONE            = 7,
+    EVENT_PHASE_TWO            = 8,
 };
 
 enum Phases
 {
-	PHASE_ONE = 1,
-	PHASE_TWO = 2,
+    PHASE_ONE = 1,
+    PHASE_TWO = 2,
 };
 
-enum eCreatures
+enum Actions
 {
-	CREATURE_ARCING_SMASH   = 71455,
-	CREATURE_ANCIENT_MIASMA = 71513,
+    ACTION_IMPLOSION_DAMAGE = 1,
 };
 
-enum eTexts
+enum Creatures
 {
-	MALKOROK_INTRO             = 1,
-	MALKOROK_AGGRO             = 2,
-	MALKOROK_ARCING_SMASH      = 3, // 0, 1 or 2 in database
-	MALKOROK_BREATH_OF_YSHAARJ = 6, // 0 or 1 in database
-	MALKOROK_BLOOD_RAGE        = 7,
-	MALKOROK_BERSERK           = 9,
-	MALKOROK_WIPE              = 10,
-	MALKOROK_DEATH             = 11,
+    CREATURE_ARCING_SMASH   = 71455,
+    CREATURE_ANCIENT_MIASMA = 71513,
+    CREATURE_IMPLOSION      = 71470,
+    MAX_CREATURES           = 3,
+};
+
+enum Talk
+{
+    MALKOROK_INTRO             = 1,
+    MALKOROK_AGGRO             = 2,
+    MALKOROK_ARCING_SMASH      = 3, // 0, 1 or 2 in database
+    MALKOROK_BREATH_OF_YSHAARJ = 6, // 0 or 1 in database
+    MALKOROK_BLOOD_RAGE        = 7,
+    MALKOROK_BERSERK           = 9,
+    MALKOROK_WIPE              = 10,
+    MALKOROK_DEATH             = 11,
+};
+
+const Position centerPos = { 1914.38f, -4950.57f, -198.96f, 3.77f };
+
+uint8 creaturesToDespawn[MAX_CREATURES] =
+{
+    CREATURE_ARCING_SMASH,
+    CREATURE_ANCIENT_MIASMA,
+    CREATURE_IMPLOSION
 };
 
 static void DespawnCreaturesInArea(uint32 entry, WorldObject* object)
@@ -79,568 +97,525 @@ static void DespawnCreaturesInArea(uint32 entry, WorldObject* object)
         (*iter)->DespawnOrUnsummon();
 }
 
-// 71454 - Malkorok
 class boss_malkorok : public CreatureScript
 {
-	public:
-		boss_malkorok() : CreatureScript("boss_malkorok") { }
+    public:
+        boss_malkorok() : CreatureScript("boss_malkorok") { }
 
-		struct boss_malkorokAI : public BossAI
-		{
-			boss_malkorokAI(Creature* creature) : BossAI(creature, DATA_MALKOROK)
-			{
-				pInstance = creature->GetInstanceScript();
-			}
+        struct boss_malkorokAI : public BossAI
+        {
+            boss_malkorokAI(Creature* creature) : BossAI(creature, DATA_MALKOROK)
+            {
+				me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
+				me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK_DEST, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_STUN, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_FEAR, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_ROOT, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_FREEZE, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_POLYMORPH, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_HORROR, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_SAPPED, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_CHARM, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_DISORIENTED, true);
+				me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_INTERRUPT, true);
+				me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_CONFUSE, true);
 
-			InstanceScript* pInstance;
+                pInstance = creature->GetInstanceScript();
+            }
 
-			uint8 arcingSmashController;
+            InstanceScript* pInstance;
 
-			void Reset()
-			{
-				_Reset();
-				arcingSmashController = 0;
+            void Reset() override
+            {
+                _Reset();
 
-				me->SetReactState(REACT_AGGRESSIVE);
-				me->setFaction(16);
-				me->setPowerType(POWER_RAGE);
-				me->SetMaxPower(POWER_RAGE, 100);
+                me->SetReactState(REACT_AGGRESSIVE);
+                me->setFaction(16);
+                me->setPowerType(POWER_RAGE);
+                me->SetMaxPower(POWER_RAGE, 1000);
 
-				events.Reset();
-				events.SetPhase(PHASE_ONE);
-			}
+                events.Reset();
+                events.SetPhase(PHASE_ONE);
 
-			void JustDied(Unit* /*killer*/)
-			{
-				Talk(MALKOROK_DEATH);
-			}
+                for (uint8 i = 0; i < Creatures::MAX_CREATURES; ++i)
+                    DespawnCreaturesInArea(creaturesToDespawn[i], me);
+            }
 
-			void KilledUnit(Unit* u)
-			{
-			}
+            void JustDied(Unit* /*killer*/) override
+            {
+                _JustDied();
+                Talk(MALKOROK_DEATH);
+                
+                for (uint8 i = 0; i < Creatures::MAX_CREATURES; ++i)
+                    DespawnCreaturesInArea(creaturesToDespawn[i], me);
+            }
+            
+            void MovementInform(uint32 type, uint32 id) override
+            {
+                if (GetPhase() != PHASE_ONE)
+                    return;
 
+                Talk(MALKOROK_ARCING_SMASH);
+                
+                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true);
+                if (!target)
+                    return;
 
-			void EnterCombat(Unit* unit)
-			{
-				Talk(MALKOROK_AGGRO);
-			
-				float homeX = me->GetHomePosition().GetPositionX();
-				float homeY = me->GetHomePosition().GetPositionY();
-				float homeZ = me->GetHomePosition().GetPositionZ();
-				me->SummonCreature(CREATURE_ANCIENT_MIASMA, homeX, homeY, homeZ, 5.0f, TEMPSUMMON_MANUAL_DESPAWN);
+                if (Creature* smash = me->SummonCreature(CREATURE_ARCING_SMASH, centerPos))
+                {
+                    smash->SetReactState(REACT_PASSIVE);
 
-				events.SetPhase(PHASE_ONE);
-				events.ScheduleEvent(EVENT_ARCING_SMASH_FIRST, 15000, 0, PHASE_ONE);
-				events.ScheduleEvent(EVENT_SEISMIC_SLAM, 16000, 0, PHASE_ONE); // 1 second after Arcing Smash
-				events.ScheduleEvent(EVENT_IMPLODING_ENERGY, 17000, 0, PHASE_ONE); // 2 seconds after Arcing Smash
-				events.ScheduleEvent(EVENT_PHASE_TWO, 120000, 0, PHASE_ONE);
-			}
+                    smash->SetFacingToObject(target);
+                    smash->SetOrientation(me->GetAngle(target));
+                    smash->CastSpell(smash, SPELL_ARCING_SMASH_DMG);
+                }
 
-			void UpdateAI(const uint32 diff)
-			{
-				if (!UpdateVictim())
-					return;
+                me->SetFacingToObject(target);
+                me->SetOrientation(me->GetAngle(target));
 
-				if (me->HasUnitState(UNIT_STATE_CASTING))
-					return;
+                // Reset attack flags to enable attacking after casting
+                me->AttackStop();
 
-				events.Update(diff);
+                // There is a bug with the spell
+                // it will be interrupted on moving
+                me->GetMotionMaster()->Clear(false);
+                me->GetMotionMaster()->MovementExpired(false);
+                me->StopMoving();
 
+                DoCast(me, SPELL_ARCING_SMASH_CHANNEL);
+            }
 
-				switch (events.ExecuteEvent())
-				{
-					case EVENT_PHASE_ONE:
-					{
-						DoCast(me, SPELL_RELENTLESS_ASSAULT);
-						float homeX = me->GetHomePosition().GetPositionX();
-						float homeY = me->GetHomePosition().GetPositionY();
-						float homeZ = me->GetHomePosition().GetPositionZ();
-						me->SummonCreature(CREATURE_ANCIENT_MIASMA, homeX, homeY, homeZ, 5.0f, TEMPSUMMON_MANUAL_DESPAWN);
+            void EnterCombat(Unit* unit) override
+            {
+                _EnterCombat();
+                Talk(MALKOROK_AGGRO);
+                me->SummonCreature(CREATURE_ANCIENT_MIASMA, centerPos, TEMPSUMMON_MANUAL_DESPAWN);
 
-						events.SetPhase(PHASE_ONE);
-						events.ScheduleEvent(EVENT_SEISMIC_SLAM, urand(13000, 17000), 0, PHASE_ONE);
-						events.ScheduleEvent(EVENT_ARCING_SMASH_FIRST, 15000, 0, PHASE_ONE);
-						events.ScheduleEvent(EVENT_IMPLODING_ENERGY, urand(13000, 17000), 0, PHASE_ONE);
-						events.ScheduleEvent(EVENT_PHASE_TWO, 120000, 0, PHASE_ONE);
-						break;
-					}
+                events.SetPhase(PHASE_ONE);
+                events.ScheduleEvent(EVENT_ARCING_SMASH_FIRST, 11000, 0, PHASE_ONE);
+                events.ScheduleEvent(EVENT_SEISMIC_SLAM, 5000, 0, PHASE_ONE);
+                events.ScheduleEvent(EVENT_BREATH_OF_YSHARRJ, 68000, 0, PHASE_ONE);
+                events.ScheduleEvent(EVENT_REGENERATE_POWER, 833, 0, PHASE_ONE);
+                events.ScheduleEvent(EVENT_PHASE_TWO, 120000, 0, PHASE_ONE);
+                SetPhase(PHASE_ONE);
+            }
 
-					case EVENT_ARCING_SMASH_ROOT:
-					{
-						me->SetControlled(false, UNIT_STATE_ROOT);
-						me->DisableRotate(false);
-						break;
-					}
+            void UpdateAI(const uint32 diff) override
+            {
+                if (!UpdateVictim())
+                    return;
 
-					case EVENT_ARCING_SMASH_FIRST:
-					{
-						float homeX = me->GetHomePosition().GetPositionX();
-						float homeY = me->GetHomePosition().GetPositionY();
-						float homeZ = me->GetHomePosition().GetPositionZ();
-						me->GetMotionMaster()->MoveJump(homeX, homeY, homeZ, 40.0f, 40.0f);
+                if (me->HasUnitState(UNIT_STATE_CASTING))
+                    return;
 
-						if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
-						{
-							if (Creature* summArcingSmash = me->SummonCreature(CREATURE_ARCING_SMASH, *target, TEMPSUMMON_MANUAL_DESPAWN))
-							{
-								me->SetOrientation(me->GetAngle(summArcingSmash));
-								me->SetControlled(true, UNIT_STATE_ROOT);
-								me->DisableRotate(true);
-								me->SetFacingTo(me->GetAngle(summArcingSmash));
-								me->SendMovementFlagUpdate();
-								Talk(MALKOROK_ARCING_SMASH);
-								DoCast(summArcingSmash, SPELL_ARCING_SMASH);
-							}
-						}
+                if (GetPhase() == PHASE_TWO)
+                {
+                    me->SetPower(Powers::POWER_RAGE, 0);
+                    if (!me->HasUnitState(UNIT_STATE_CASTING) && me->isAttackReady() && me->IsWithinMeleeRange(me->getVictim()))
+                    {
+                        DoCastVictim(SPELL_BLOOD_RAGE_DMG, true);
+                        me->resetAttackTimer();
+                    }
+                }
+                else
+                    DoMeleeAttackIfReady();
 
-						events.ScheduleEvent(EVENT_ARCING_SMASH_ROOT, 0, 0, PHASE_ONE);
-						events.ScheduleEvent(EVENT_ARCING_SMASH_SECOND, 15000, 0, PHASE_ONE);
-						break;
-					}
+                events.Update(diff);
 
-					case EVENT_ARCING_SMASH_SECOND:
-					{
-						float homeX = me->GetHomePosition().GetPositionX();
-						float homeY = me->GetHomePosition().GetPositionY();
-						float homeZ = me->GetHomePosition().GetPositionZ();
-						me->GetMotionMaster()->MoveJump(homeX, homeY, homeZ, 40.0f, 40.0f);
+                switch (events.ExecuteEvent())
+                {
+                    case EVENT_ARCING_SMASH:
+                    {
+                        if (GetPhase() != PHASE_ONE)
+                            break;
 
-						if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
-						{
-							if (Creature* summArcingSmash = me->SummonCreature(CREATURE_ARCING_SMASH, *target, TEMPSUMMON_MANUAL_DESPAWN))
-							{
-								me->SetOrientation(me->GetAngle(summArcingSmash));
-								me->SetControlled(true, UNIT_STATE_ROOT);
-								me->DisableRotate(true);
-								me->SetFacingTo(me->GetAngle(summArcingSmash));
-								me->SendMovementFlagUpdate();
-								Talk(MALKOROK_ARCING_SMASH);
-								DoCast(summArcingSmash, SPELL_ARCING_SMASH);
-							}
-						}
+                        DoCast(me, SPELL_ARCING_SMASH_JUMP);
+                        events.ScheduleEvent(EVENT_IMPLODING_ENERGY, 5000); // 10 secs after arcing smash it explodes
+                        events.ScheduleEvent(EVENT_ARCING_SMASH, 19000);
+                        break;
+                    }
 
-						events.ScheduleEvent(EVENT_ARCING_SMASH_ROOT, 0, 0, PHASE_ONE);
-						events.ScheduleEvent(EVENT_ARCING_SMASH_THIRD, 15000, 0, PHASE_ONE);
-						break;
-					}
+                    case EVENT_BREATH_OF_YSHARRJ:
+                    {
+                        if (GetPhase() != PHASE_ONE)
+                            break;
 
-					case EVENT_ARCING_SMASH_THIRD:
-					{
-						float homeX = me->GetHomePosition().GetPositionX();
-						float homeY = me->GetHomePosition().GetPositionY();
-						float homeZ = me->GetHomePosition().GetPositionZ();
-						me->GetMotionMaster()->MoveJump(homeX, homeY, homeZ, 40.0f, 40.0f);
+                        DoCastAOE(SPELL_BREATH_OF_YSHAARJ);
 
-						if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
-						{
-							if (Creature* summArcingSmash = me->SummonCreature(CREATURE_ARCING_SMASH, *target, TEMPSUMMON_MANUAL_DESPAWN))
-							{
-								me->SetOrientation(me->GetAngle(summArcingSmash));
-								me->SetControlled(true, UNIT_STATE_ROOT);
-								me->DisableRotate(true);
-								me->SetFacingTo(me->GetAngle(summArcingSmash));
-								me->SendMovementFlagUpdate();
-								Talk(MALKOROK_ARCING_SMASH);
-								DoCast(summArcingSmash, SPELL_ARCING_SMASH);
-							}
-						}
+                        events.ScheduleEvent(EVENT_ARCING_SMASH_FIRST, 15000, 0, PHASE_ONE);
+                        break;
+                    }
 
-						events.ScheduleEvent(EVENT_ARCING_SMASH_ROOT, 0, 0, PHASE_ONE);
-						events.ScheduleEvent(EVENT_BREATH_OF_YSHARRJ, 10000, 0, PHASE_ONE);
-						break;
-					}
+                    case EVENT_SEISMIC_SLAM:
+                    {
+                        if (GetPhase() != PHASE_ONE)
+                            break;
 
-					case EVENT_BREATH_OF_YSHARRJ:
-					{
-						DoCast(SPELL_BREATH_OF_YSHAARJ);
+                        DoCastAOE(SPELL_SEISMIC_SLAM);
 
-						events.ScheduleEvent(EVENT_ARCING_SMASH_FIRST, 15000, 0, PHASE_ONE);
-						break;
-					}
+                        events.ScheduleEvent(EVENT_SEISMIC_SLAM, 16000, 0, PHASE_ONE);
+                        break;
+                    }
 
-					case EVENT_SEISMIC_SLAM:
-					{
-						if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
-						{
-							std::list<Player*> pl_list;
-							target->GetPlayerListInGrid(pl_list, 5.0f);
-							for (auto itr : pl_list)
-							{
-								DoCast(itr, SPELL_SEISMIC_SLAM);
-							}
+                    case EVENT_IMPLODING_ENERGY:
+                    {
+                        if (GetPhase() != PHASE_ONE)
+                            break;
 
-							DoCast(target, SPELL_SEISMIC_SLAM);
-						}
+                        std::list<Position> positions;
 
-						events.ScheduleEvent(EVENT_SEISMIC_SLAM, 16000, 0, PHASE_ONE);
-						break;
-					}
+                        positions.clear();
 
-					case EVENT_IMPLODING_ENERGY:
-					{
-						DoCast(SPELL_IMPLODING_ENERGY);
+                        uint8 count = Is25ManRaid() ? 7 : 3;
 
-						events.ScheduleEvent(EVENT_IMPLODING_ENERGY, 17000, 0, PHASE_ONE);
-						break;
-					}
+                        for (uint8 i = 0; i < count; ++i)
+                        {
+                            Position implodingPosition;
 
-					case EVENT_PHASE_TWO:
-					{
-						events.Reset();
-						events.SetPhase(PHASE_TWO);
-						DespawnCreaturesInArea(CREATURE_ANCIENT_MIASMA, me);
-						std::list<Player*> pl_list;
-						me->GetPlayerListInGrid(pl_list, 100.0f);
-						for (auto itr : pl_list)
-						{
-							if (itr->HasAura(SPELL_ANCIENT_MIASMA_DMG))
-								itr->RemoveAura(SPELL_ANCIENT_MIASMA_DMG);
+                            float angle = frand(0.f, 2 * M_PI);
+                            implodingPosition.m_positionX = centerPos.GetPositionX() + 24.0f * std::cos(angle);
+                            implodingPosition.m_positionY = centerPos.GetPositionY() + 24.0f * std::sin(angle);
+                            implodingPosition.m_positionZ = centerPos.GetPositionZ() + 1.0f;
+                            implodingPosition.m_orientation = 0.0f;
 
-							if (itr->HasAura(SPELL_ANCIENT_MIASMA))
-								itr->RemoveAura(SPELL_ANCIENT_MIASMA);
-						}
+                            positions.push_back(implodingPosition);
+                        }
 
-						DoCast(SPELL_BLOOD_RAGE);
-						events.ScheduleEvent(EVENT_BLOOD_RAGE, 1000, 0, PHASE_TWO);
-						events.ScheduleEvent(EVENT_DISPLACED_ENERGY, 5000, 0, PHASE_TWO);
-						events.ScheduleEvent(EVENT_PHASE_ONE, 20000, 0, PHASE_TWO);
-						break;
-					}
+                        for (auto positionItr = positions.begin(); positionItr != positions.end(); ++positionItr)
+                        {
+                            me->SummonCreature(CREATURE_IMPLOSION, *positionItr);
+                        }
 
-					case EVENT_BLOOD_RAGE:
-					{
-						DoCast(SPELL_BLOOD_RAGE_DAMAGE);
+                        DoCastAOE(SPELL_IMPLODING_ENERGY);
+                        break;
+                    }
 
-						events.ScheduleEvent(EVENT_BLOOD_RAGE, 1000, 0, PHASE_TWO);
-						break;
-					}
+                    case EVENT_REGENERATE_POWER:
+                    {
+                        if (GetPhase() != PHASE_ONE)
+                            break;
 
-					case EVENT_DISPLACED_ENERGY:
-					{
-						if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
-						{
-							DoCast(target, SPELL_DISPLACED_ENERGY);
-						}
+                        me->SetPower(Powers::POWER_RAGE, me->GetPower(Powers::POWER_RAGE) + 10);
+                        events.ScheduleEvent(EVENT_REGENERATE_POWER, 833, 0, PHASE_ONE);
+                    }
 
-						events.ScheduleEvent(EVENT_DISPLACED_ENERGY, 5000, 0, PHASE_TWO);
-						break;
-					}
-				}
+                    case EVENT_PHASE_TWO:
+                    {
+                        if (GetPhase() != PHASE_ONE)
+                            break;
 
-				DoMeleeAttackIfReady();
-			}
-		};
+                        events.SetPhase(PHASE_TWO);
+                        SetPhase(PHASE_TWO);
+                        DespawnCreaturesInArea(CREATURE_ANCIENT_MIASMA, me);
 
-		CreatureAI* GetAI(Creature* pCreature) const
-		{
-			return new boss_malkorokAI(pCreature);
-		}
+                        me->SetPower(Powers::POWER_RAGE, 0);
+                        DoCast(me, SPELL_BLOOD_RAGE);
+                        events.ScheduleEvent(EVENT_PHASE_ONE, 20000, 0, PHASE_TWO);
+                        break;
+                    }
+
+                    case EVENT_PHASE_ONE:
+                    {
+                        me->SummonCreature(CREATURE_ANCIENT_MIASMA, centerPos, TEMPSUMMON_MANUAL_DESPAWN);
+
+                        events.SetPhase(PHASE_ONE);
+                        events.ScheduleEvent(EVENT_ARCING_SMASH_FIRST, 11000, 0, PHASE_ONE);
+                        events.ScheduleEvent(EVENT_SEISMIC_SLAM, 5000, 0, PHASE_ONE);
+                        events.ScheduleEvent(EVENT_BREATH_OF_YSHARRJ, 68000, 0, PHASE_ONE);
+                        events.ScheduleEvent(EVENT_REGENERATE_POWER, 833, 0, PHASE_ONE);
+                        events.ScheduleEvent(EVENT_PHASE_TWO, 120000, 0, PHASE_ONE);
+                        SetPhase(PHASE_ONE);
+                        break;
+                    }
+                }
+            }
+
+            private:
+                uint8 m_phaseId;
+
+                uint8 GetPhase() { return m_phaseId; }
+                void SetPhase(uint8 phaseId) { m_phaseId = phaseId; }
+        };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new boss_malkorokAI(creature);
+        }
 };
 
-// 71513 - Ancient Miasma
-class mob_ancient_miasma : public CreatureScript
+class npc_ancient_miasma : public CreatureScript
 {
-	public:
-		mob_ancient_miasma() : CreatureScript("mob_ancient_miasma") { }
+    public:
+        npc_ancient_miasma() : CreatureScript("npc_ancient_miasma") { }
 
-		struct mob_ancient_miasmaAI : public ScriptedAI
-		{
-			mob_ancient_miasmaAI(Creature* creature) : ScriptedAI(creature)
-			{
-				pInstance = creature->GetInstanceScript();
-			}
+        struct npc_ancient_miasmaAI : public ScriptedAI
+        {
+            npc_ancient_miasmaAI(Creature* creature) : ScriptedAI(creature)
+            {
+                pInstance = creature->GetInstanceScript();
+            }
 
-			InstanceScript* pInstance;
-			EventMap events;
+            InstanceScript* pInstance;
+            EventMap events;
 
-			void Reset() override
-			{
-				me->SetInCombatWithZone();
-				DoCast(SPELL_ANCIENT_MIASMA_VIS);
-				std::list<Player*> pl_list;
-				me->GetPlayerListInGrid(pl_list, 100.0f);
-				for (auto itr : pl_list)
-				{
-					if (!itr->HasAura(SPELL_ANCIENT_MIASMA_DMG))
-						me->AddAura(SPELL_ANCIENT_MIASMA_DMG, itr);
+            void DamageTaken(Unit* who, uint32& damage) override
+            {
+                // UNIT_FLAG_NON_ATTACKABLE is removed because delayed spells cannot hit npc with this flag
+                // So protect npc from any damage
+                damage = 0;
+            }
 
-					if (!itr->HasAura(SPELL_ANCIENT_MIASMA))
-						me->AddAura(SPELL_ANCIENT_MIASMA, itr);
-				}
+            void Reset() override
+            {
+                me->SetInCombatWithZone();
+                DoCast(SPELL_ANCIENT_MIASMA_VIS);
+                std::list<Player*> pl_list;
+                me->GetPlayerListInGrid(pl_list, 100.0f);
+                for (auto itr : pl_list)
+                {
+                    if (!itr->HasAura(SPELL_ANCIENT_MIASMA_DMG))
+                        me->AddAura(SPELL_ANCIENT_MIASMA_DMG, itr);
 
-				me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
-				me->AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
-			}
-		};
+                    if (!itr->HasAura(SPELL_ANCIENT_MIASMA))
+                        me->AddAura(SPELL_ANCIENT_MIASMA, itr);
+                }
 
-		CreatureAI* GetAI(Creature* pCreature) const
-		{
-			return new mob_ancient_miasmaAI(pCreature);
-		}
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
+                me->AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
+            }
+        };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_ancient_miasmaAI(creature);
+        }
 };
 
-
-// 142913 - Displaced Energy
-class spell_displaced_energy : public SpellScriptLoader
+class npc_malkorok_implosion : public CreatureScript
 {
-	public:
-		spell_displaced_energy() : SpellScriptLoader("spell_displaced_energy") { }
+    public:
+        npc_malkorok_implosion() : CreatureScript("npc_malkorok_implosion") { }
 
-		class spell_displaced_energy_AuraScript : public AuraScript
-		{
-			PrepareAuraScript(spell_displaced_energy_AuraScript);
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_malkorok_implosionAI(creature);
+        }
 
-			void OnRemove(constAuraEffectPtr /*aurEff*/, AuraEffectHandleModes /*mode*/)
-			{
-				if (Unit* caster = GetCaster())
-					caster->CastSpell(caster, SPELL_DISPLACED_ENERGY_D);
-			}
+        struct npc_malkorok_implosionAI : public Scripted_NoMovementAI
+        {
+            npc_malkorok_implosionAI(Creature* creature) : Scripted_NoMovementAI(creature),
+                updateTimer(4000), hasExploded(false)
+            {
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
+                me->SetReactState(REACT_PASSIVE);
+            }
 
-			void Register()
-			{
-				OnEffectRemove += AuraEffectRemoveFn(spell_displaced_energy_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
-			}
-		};
+            void Reset() override
+            {
+                me->AddAura(SPELL_IMPLODING_ENERGY_AURA, me);
 
-		AuraScript* GetAuraScript() const
-		{
-			return new spell_displaced_energy_AuraScript();
-		}
+                updateTimer = 4000;
+                hasExploded = false;
+            }
+
+            void DoAction(const int32 action) override
+            {
+                if (action == ACTION_IMPLOSION_DAMAGE)
+                {
+                    DoCastAOE(SPELL_IMPLODING_ENERGY_DMG_2, true);
+                }
+            }
+
+            void UpdateAI(const uint32 diff) override
+            {
+                if (hasExploded)
+                    return;
+
+                if (updateTimer <= diff)
+                {
+                    hasExploded = true;
+
+                    DoCastAOE(SPELL_IMPLODING_ENERGY_DMG);
+
+                    me->DespawnOrUnsummon(1000);
+                }
+                else
+                {
+                    updateTimer -= diff;
+                }
+            }
+
+        private:
+
+            uint32 updateTimer;
+            bool hasExploded;
+
+        };
 };
 
-// 142890 - Blood Rage
-class spell_blood_rage : public SpellScriptLoader
+class npc_malkorok_arcing_smash : public CreatureScript
 {
-	public:
-		spell_blood_rage() : SpellScriptLoader("spell_blood_rage") { }
+    public:
+        npc_malkorok_arcing_smash() : CreatureScript("npc_malkorok_arcing_smash") { }
 
-		class spell_blood_rage_SpellScript : public SpellScript
-		{
-			PrepareSpellScript(spell_blood_rage_SpellScript);
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_malkorok_arcing_smashAI(creature);
+        }
 
-			bool Load()
-			{
-				players = 1;
-				return true;
-			}
-
-			void CountTargets(std::list<WorldObject*>& targets)
-			{
-				players = targets.size();
-			}
-
-			void SplitDamage(SpellEffIndex /*eff*/)
-			{
-				SetHitDamage(int32(GetHitDamage() / players));
-			}
-
-			void Register()
-			{
-				OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_blood_rage_SpellScript::CountTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
-				OnEffectHitTarget += SpellEffectFn(spell_blood_rage_SpellScript::SplitDamage, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
-			}
-
-			private:
-				uint8 players;
-		};
-
-		SpellScript* GetSpellScript() const
-		{
-			return new spell_blood_rage_SpellScript();
-		}
+        struct npc_malkorok_arcing_smashAI : public Scripted_NoMovementAI
+        {
+            npc_malkorok_arcing_smashAI(Creature* creature) : Scripted_NoMovementAI(creature)
+            {
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
+                me->SetReactState(REACT_PASSIVE);
+            }
+        };
 };
 
-// 142861 - Ancient Miasma
-class spell_ancient_barrier : public SpellScriptLoader
+class EntryCheck
 {
-	public:
-		spell_ancient_barrier() : SpellScriptLoader("spell_ancient_barrier") { }
+    public:
+        
+        EntryCheck(uint32 entry) : m_Entry(entry) { }
 
-		class spell_ancient_barrier_AuraScript : public AuraScript
-		{
-			PrepareAuraScript(spell_ancient_barrier_AuraScript);
+        bool operator()(WorldObject* object) const
+        {
+            if (object->GetEntry() == m_Entry)
+                return false;
 
-			void OnUpdate(uint32 diff)
-			{
-				if (Unit* caster = GetCaster())
-					if (Unit* player = GetTarget())
-					{
-						int32 absorb = player->GetHealingTakenInPastSecs(1);
-						int32 health = player->GetMaxHealth();
+            return true;
+        }
 
-						if (!(player->HasAura(SPELL_ANCIENT_BARRIER_L)) && !(player->HasAura(SPELL_ANCIENT_BARRIER_M)) && !(player->HasAura(SPELL_ANCIENT_BARRIER_H)))
-							caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_L, &absorb, NULL, NULL, true);
+    private:
 
-						int32 remainingAbsorb;
-						int32 newAbsorb;
-						uint32 casterGuid = caster->GetGUID();
-
-						if (player->HasAura(SPELL_ANCIENT_BARRIER_L))
-						{
-							remainingAbsorb = player->GetRemainingPeriodicAmount(casterGuid, SPELL_ANCIENT_BARRIER_L, SPELL_AURA_SCHOOL_ABSORB);
-							newAbsorb = remainingAbsorb+absorb;
-						}
-
-						if (player->HasAura(SPELL_ANCIENT_BARRIER_M))
-						{
-							remainingAbsorb = player->GetRemainingPeriodicAmount(casterGuid, SPELL_ANCIENT_BARRIER_M, SPELL_AURA_SCHOOL_ABSORB);
-							newAbsorb = remainingAbsorb + absorb;
-						}
-
-						if (player->HasAura(SPELL_ANCIENT_BARRIER_H))
-						{
-							remainingAbsorb = player->GetRemainingPeriodicAmount(casterGuid, SPELL_ANCIENT_BARRIER_H, SPELL_AURA_SCHOOL_ABSORB);
-							newAbsorb = remainingAbsorb + absorb;
-						}
-
-						// If the remaining absorb + the new absorb is between 15% and 85% health cast visual for medium strenght shield
-						if (newAbsorb >= health * 15 / 100 && newAbsorb < health * 85 / 100)
-						{
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_L))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_L); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_M, &newAbsorb, NULL, NULL, true);
-							}
-
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_M))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_M); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_M, &newAbsorb, NULL, NULL, true);
-							}
-
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_H))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_H); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_M, &newAbsorb, NULL, NULL, true);
-							}
-						}
-
-						// If the remaining absorb + the new absorb is lower than 15% health cast visual for low strenght shield
-						if (newAbsorb < health * 15 / 100 && newAbsorb >= 0)
-						{
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_L))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_L); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_L, &newAbsorb, NULL, NULL, true);
-							}
-
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_M))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_M); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_L, &newAbsorb, NULL, NULL, true);
-							}
-
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_H))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_H); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_L, &newAbsorb, NULL, NULL, true);
-							}
-						}
-
-						// If the remaining absorb + the new absorb is lower or equal to max health and bigger than 85% health cast visual for high strenght shield
-						if (newAbsorb >= health * 85 / 100 && newAbsorb <= health)
-						{
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_L))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_L); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_H, &newAbsorb, NULL, NULL, true);
-							}
-
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_M))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_M); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_H, &newAbsorb, NULL, NULL, true);
-							}
-
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_H))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_H); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_H, &newAbsorb, NULL, NULL, true);
-							}
-						}
-						// If the remaining absorb + the new absorb is bigger than max health set it to be equal to the max health
-						if (newAbsorb > health)
-						{
-							newAbsorb = health;
-							
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_L))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_L); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_H, &newAbsorb, NULL, NULL, true);
-							}
-
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_M))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_M); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_H, &newAbsorb, NULL, NULL, true);
-							}
-
-							if (player->HasAura(SPELL_ANCIENT_BARRIER_H))
-							{
-								player->RemoveAura(SPELL_ANCIENT_BARRIER_H); // prevents buggs
-								caster->CastCustomSpell(player, SPELL_ANCIENT_BARRIER_H, &newAbsorb, NULL, NULL, true);
-							}
-						}
-					}
-			}
-
-			void Register()
-			{
-				OnAuraUpdate += AuraUpdateFn(spell_ancient_barrier_AuraScript::OnUpdate);
-			}
-		};
-
-		AuraScript* GetAuraScript() const
-		{
-			return new spell_ancient_barrier_AuraScript();
-		}
+        uint32 m_Entry;
 };
 
-// 142842 - Breath of Y'shaarj
-class spell_breath_of_yshaarj : public SpellScriptLoader
+class spell_malkorok_breath_of_yshaarj : public SpellScriptLoader
 {
-	public:
-		spell_breath_of_yshaarj() : SpellScriptLoader("spell_breath_of_yshaarj") { }
+    public:
+        spell_malkorok_breath_of_yshaarj() : SpellScriptLoader("spell_malkorok_breath_of_yshaarj") { }
 
-		class spell_breath_of_yshaarj_SpellScript : public SpellScript
-		{
-			PrepareSpellScript(spell_breath_of_yshaarj_SpellScript);
+        class spell_malkorok_breath_of_yshaarj_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_malkorok_breath_of_yshaarj_SpellScript);
 
-			void HandleAfterCast()
-			{
-				if (InstanceScript* m_Instance = GetCaster()->GetInstanceScript())
-					if (Creature * malkorok = m_Instance->instance->GetCreature(m_Instance->GetData64(DATA_MALKOROK)))
-					{
-						std::list<Creature*> npc_list;
-						malkorok->GetCreatureListWithEntryInGrid(npc_list, CREATURE_ARCING_SMASH, 100.0f);
-						for (auto itr : npc_list)
-						{
-							malkorok->CastSpell(itr, SPELL_BREATH_DAMAGE);
-							itr->DespawnOrUnsummon(0);
-						}
-					}
-			}
+            void FilterTargets(std::list<WorldObject*>& targets)
+            {
+                EntryCheck entryCheck(CREATURE_ARCING_SMASH);
+                targets.remove_if(entryCheck);
+            }
 
-			void Register()
-			{
-				AfterCast += SpellCastFn(spell_breath_of_yshaarj_SpellScript::HandleAfterCast);
-			}
-		};
+            void HandleHitTarget(SpellEffIndex /*effIndex*/)
+            {
+                if (Unit* target = GetHitUnit())
+                    target->CastSpell(target, SPELL_BREATH_DAMAGE, true);
+            }
 
-		SpellScript* GetSpellScript() const
-		{
-			return new spell_breath_of_yshaarj_SpellScript();
-		}
+            void Register() override
+            {
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_malkorok_breath_of_yshaarj_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENTRY);
+                OnEffectHitTarget += SpellEffectFn(spell_malkorok_breath_of_yshaarj_SpellScript::HandleHitTarget, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const override
+        {
+            return new spell_malkorok_breath_of_yshaarj_SpellScript();
+        }
+};
+
+class spell_malkorok_seismic_slam : public SpellScriptLoader
+{
+    public:
+        spell_malkorok_seismic_slam() : SpellScriptLoader("spell_malkorok_seismic_slam") { }
+
+        class spell_malkorok_seismic_slam_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_malkorok_seismic_slam_SpellScript);
+
+            void FilterTargets(std::list<WorldObject*>& targets)
+            {
+                if (!GetCaster())
+                    return;
+
+                if (Creature* creature = GetCaster()->ToCreature())
+                {
+                    Unit* target = creature->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, -15.0f, true);
+                    if (!target)
+                        target = creature->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true);
+                    
+                    if (target)
+                    {
+                        targets.clear();
+                        targets.push_back(target);
+                    }
+                }
+            }
+
+            void HandleHitTarget(SpellEffIndex /*effIndex*/)
+            {
+                if (!GetCaster() || !GetHitUnit())
+                    return;
+
+                GetCaster()->CastSpell(GetHitUnit(), SPELL_SEISMIC_SLAM_DMG, true);
+            }
+
+            void Register() override
+            {
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_malkorok_seismic_slam_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+                OnEffectHitTarget += SpellEffectFn(spell_malkorok_seismic_slam_SpellScript::HandleHitTarget, EFFECT_0, SPELL_EFFECT_DUMMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const override
+        {
+            return new spell_malkorok_seismic_slam_SpellScript();
+        }
+};
+
+class spell_malkorok_imploding_energy_dmg : public SpellScriptLoader
+{
+    public:
+        spell_malkorok_imploding_energy_dmg() : SpellScriptLoader("spell_malkorok_imploding_energy_dmg") { }
+
+        class spell_malkorok_imploding_energy_dmg_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_malkorok_imploding_energy_dmg_SpellScript);
+
+            void FilterTargets(std::list<WorldObject*>& targets)
+            {
+                if (!GetCaster())
+                    return;
+
+                if (targets.empty())
+                    if (Creature* creature = GetCaster()->ToCreature())
+                        creature->AI()->DoAction(ACTION_IMPLOSION_DAMAGE);
+            }
+
+            void Register() override
+            {
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_malkorok_imploding_energy_dmg_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const override
+        {
+            return new spell_malkorok_imploding_energy_dmg_SpellScript();
+        }
 };
 
 void AddSC_malkorok()
 {
-	new boss_malkorok();
+    new boss_malkorok();                       // 71454
 
-	new mob_ancient_miasma();
+    new npc_ancient_miasma();                  // 71513
+    new npc_malkorok_implosion();              // 71470
+    new npc_malkorok_arcing_smash();           // 71455
 
-	new spell_displaced_energy();
-	new spell_blood_rage();
-	new spell_ancient_barrier();
-	new spell_breath_of_yshaarj();
+    new spell_malkorok_breath_of_yshaarj();    // 142842
+    new spell_malkorok_seismic_slam();         // 142851
+    new spell_malkorok_imploding_energy_dmg(); // 142986
 };

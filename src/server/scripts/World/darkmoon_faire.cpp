@@ -299,7 +299,7 @@ public:
             if (barrelList.size() <= 1)
                 return;
 
-            WoWSource::Containers::RandomResizeList(barrelList, 1);
+            MoPCore::Containers::RandomResizeList(barrelList, 1);
 
             if (Creature* barrel = barrelList.front())
             {
@@ -1219,8 +1219,8 @@ public:
                 if (Creature* finlayCoolshot = me->FindNearestCreature(NPC_FINLAY_COOLSHOT, 40.0f))
                 {
                     std::list<Player*> players;
-                    WoWSource::AnyPlayerInObjectRangeCheck checker(me, 18.0f);
-                    WoWSource::PlayerListSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+                    MoPCore::AnyPlayerInObjectRangeCheck checker(me, 18.0f);
+                    MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
                     me->VisitNearbyWorldObject(18.0f, searcher);
 
                     for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)
@@ -1279,7 +1279,7 @@ public:
 
             std::unordered_map<uint32 /* slotId */, Position*>::iterator itr = freeSpawnPositions.begin();
 
-            //! We avoid WoWSource::Containers::SelectRandomContainerElement because of double iteration (one for advance, one for erase)
+            //! We avoid MoPCore::Containers::SelectRandomContainerElement because of double iteration (one for advance, one for erase)
             std::advance(itr, urand(0, freeSpawnPositions.size() - 1));
 
             //! Make the target know about its slot id so we can free the spot later on. MANUAL_DESPAWN as we despawn
@@ -1667,7 +1667,7 @@ class npc_darkmoon_faire_target_controller : public CreatureScript
                     {
                         spawnNewTargetTimer = 3500;
 
-                        if ((lastBunny = WoWSource::Containers::SelectRandomContainerElement(bunnyList)))
+                        if ((lastBunny = MoPCore::Containers::SelectRandomContainerElement(bunnyList)))
                         {
                             lastBunny->AddAura(SPELL_TARGET_INDICATOR_ARROW, lastBunny);
                             lastBunny->AddAura(SPELL_QUICK_SHOT_INDICATOR, lastBunny);
@@ -1777,8 +1777,8 @@ public:
                     //! For some reason none of the grid searchers seem to work for gameobjects. Therefore
                     //! I have to do it from the creaturescript..
                     std::list<Player*> players;
-                    WoWSource::AnyPlayerInObjectRangeCheck checker(me, 95.0f);
-                    WoWSource::PlayerListSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+                    MoPCore::AnyPlayerInObjectRangeCheck checker(me, 95.0f);
+                    MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
                     me->VisitNearbyWorldObject(95.0f, searcher);
 
                     for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)
@@ -1801,9 +1801,9 @@ public:
                 //! Mark all players inside the deathmatch for FFA. HORRIBLE hack, I know. No time to find the original cause of
                 //! this issue. Please just act like you've never seen this, I really don't like it myself either. :)
                 std::list<Player*> playerList;
-                WoWSource::AnyPlayerInObjectRangeCheck checker(me, 95.0f);
-                WoWSource::PlayerListSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcher(me, playerList, checker);
-                //WoWSource::VisitNearbyWorldObject(me, 95.0f, searcher);
+                MoPCore::AnyPlayerInObjectRangeCheck checker(me, 95.0f);
+                MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(me, playerList, checker);
+                //MoPCore::VisitNearbyWorldObject(me, 95.0f, searcher);
 
                 for (std::list<Player*>::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
                 {

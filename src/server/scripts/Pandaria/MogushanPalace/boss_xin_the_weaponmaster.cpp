@@ -209,7 +209,7 @@ public:
 
             for (int n = 0; n < 2 && !m_lLaunchersList.empty(); ++n)
             {
-                if (Creature* pTrap = WoWSource::Containers::SelectRandomContainerElement(m_lLaunchersList))
+                if (Creature* pTrap = MoPCore::Containers::SelectRandomContainerElement(m_lLaunchersList))
                 {
                     me->AddAura(aBladeSpells[n], pTrap);
                     me->AddAura(SPELL_BLADE_TRAP_VISUAL, pTrap);
@@ -984,7 +984,7 @@ public:
 
             std::list<WorldObject*> finalTarget;
 
-            finalTarget.push_back(WoWSource::Containers::SelectRandomContainerElement(targets));
+            finalTarget.push_back(MoPCore::Containers::SelectRandomContainerElement(targets));
 
             if (!finalTarget.empty())
                 targets = finalTarget;

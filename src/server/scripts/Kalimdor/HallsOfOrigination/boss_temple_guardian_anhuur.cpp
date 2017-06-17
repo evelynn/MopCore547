@@ -12,12 +12,14 @@ enum ScriptTexts
 
 enum Spells
 {
+    SPELL_TELEPORT              = 74969,
     SPELL_DIVINE_RECKONING      = 75592,
     SPELL_REVERBERATING_HYMN    = 75322,
     SPELL_SEARING_FLAME         = 75115,
     SPELL_SEARING_FLAME_SUM     = 75114,
     SPELL_SEARING_FLAME_DMG     = 75116,
     SPELL_SHIELD_OF_LIGHT       = 74938,
+    SPELL_SHIELD_VISUAL_2       = 74930,
     SPELL_BEAM_LEFT             = 83697, 
     SPELL_BEAM_RIGHT            = 83698, 
     SPELL_POISON_TIPPED_FANGS   = 74538,
@@ -168,6 +170,7 @@ class boss_temple_guardian_anhuur : public CreatureScript
                     if (beacons == 2)
                     {
                         me->RemoveAurasDueToSpell(SPELL_SHIELD_OF_LIGHT);
+                        me->RemoveAurasDueToSpell(SPELL_SHIELD_VISUAL_2);
                         beacons = 0;
                     }
                 }
@@ -228,7 +231,7 @@ class boss_temple_guardian_anhuur : public CreatureScript
                         achieve = true;
                         events.ScheduleEvent(EVENT_ACHIEVEMENT, 15000);
                     }
-                    //DoTeleportTo(bosspos.GetPositionX(), bosspos.GetPositionY(), bosspos.GetPositionZ());
+                    DoCast(me, SPELL_TELEPORT, true);
                     events.ScheduleEvent(EVENT_SHIELD_OF_LIGHT, 2000);
                     return;
                 }
@@ -242,6 +245,7 @@ class boss_temple_guardian_anhuur : public CreatureScript
                         case EVENT_SHIELD_OF_LIGHT:
                             me->SetOrientation(bosspos.GetOrientation());
                             DoCast(me, SPELL_SHIELD_OF_LIGHT, true);
+                            DoCast(me, SPELL_SHIELD_VISUAL_2, true);
                             events.ScheduleEvent(EVENT_REVERBERATING_HYMN, 1000);
                             break;
                         case EVENT_REVERBERATING_HYMN:

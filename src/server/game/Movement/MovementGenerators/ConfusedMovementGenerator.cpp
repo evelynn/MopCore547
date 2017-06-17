@@ -64,8 +64,8 @@ void ConfusedMovementGenerator<T>::DoInitialize(T* owner)
         float wanderY = y + frand(min_wander_distance, max_wander_distance);
 
         // prevent invalid coordinates generation
-        WoWSource::NormalizeMapCoord(wanderX);
-        WoWSource::NormalizeMapCoord(wanderY);
+        MoPCore::NormalizeMapCoord(wanderX);
+        MoPCore::NormalizeMapCoord(wanderY);
 
         if (owner->IsWithinLOS(wanderX, wanderY, z))
         {

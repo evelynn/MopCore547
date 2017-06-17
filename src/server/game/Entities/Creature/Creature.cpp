@@ -759,13 +759,13 @@ void Creature::DoFleeToGetAssistance()
     {
         Creature* creature = NULL;
 
-        CellCoord p(WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY()));
+        CellCoord p(MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY()));
         Cell cell(p);
         cell.SetNoCreate();
-        WoWSource::NearestAssistCreatureInCreatureRangeCheck u_check(this, getVictim(), radius);
-        WoWSource::CreatureLastSearcher<WoWSource::NearestAssistCreatureInCreatureRangeCheck> searcher(this, creature, u_check);
+        MoPCore::NearestAssistCreatureInCreatureRangeCheck u_check(this, getVictim(), radius);
+        MoPCore::CreatureLastSearcher<MoPCore::NearestAssistCreatureInCreatureRangeCheck> searcher(this, creature, u_check);
 
-        TypeContainerVisitor<WoWSource::CreatureLastSearcher<WoWSource::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
+        TypeContainerVisitor<MoPCore::CreatureLastSearcher<MoPCore::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
 
         cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
 
@@ -2020,7 +2020,7 @@ SpellInfo const* Creature::reachWithSpellCure(Unit* victim)
 // select nearest hostile unit within the given distance (regardless of threat list).
 Unit* Creature::SelectNearestTarget(float dist) const
 {
-    CellCoord p(WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -2030,11 +2030,11 @@ Unit* Creature::SelectNearestTarget(float dist) const
         if (dist == 0.0f)
             dist = MAX_VISIBILITY_DISTANCE;
 
-        WoWSource::NearestHostileUnitCheck u_check(this, dist);
-        WoWSource::UnitLastSearcher<WoWSource::NearestHostileUnitCheck> searcher(this, target, u_check);
+        MoPCore::NearestHostileUnitCheck u_check(this, dist);
+        MoPCore::UnitLastSearcher<MoPCore::NearestHostileUnitCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<WoWSource::UnitLastSearcher<WoWSource::NearestHostileUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<WoWSource::UnitLastSearcher<WoWSource::NearestHostileUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<MoPCore::UnitLastSearcher<MoPCore::NearestHostileUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<MoPCore::UnitLastSearcher<MoPCore::NearestHostileUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, dist);
@@ -2046,7 +2046,7 @@ Unit* Creature::SelectNearestTarget(float dist) const
 // select nearest hostile unit within the given distance and without cc on it (regardless of threat list).
 Unit* Creature::SelectNearestTargetNoCC(float dist) const
 {
-    CellCoord p(WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -2056,11 +2056,11 @@ Unit* Creature::SelectNearestTargetNoCC(float dist) const
         if (dist == 0.0f)
             dist = MAX_VISIBILITY_DISTANCE;
 
-        WoWSource::NearestHostileNoCCUnitCheck u_check(this, dist);
-        WoWSource::UnitLastSearcher<WoWSource::NearestHostileNoCCUnitCheck> searcher(this, target, u_check);
+        MoPCore::NearestHostileNoCCUnitCheck u_check(this, dist);
+        MoPCore::UnitLastSearcher<MoPCore::NearestHostileNoCCUnitCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<WoWSource::UnitLastSearcher<WoWSource::NearestHostileNoCCUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<WoWSource::UnitLastSearcher<WoWSource::NearestHostileNoCCUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<MoPCore::UnitLastSearcher<MoPCore::NearestHostileNoCCUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<MoPCore::UnitLastSearcher<MoPCore::NearestHostileNoCCUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, dist);
@@ -2072,7 +2072,7 @@ Unit* Creature::SelectNearestTargetNoCC(float dist) const
 // select nearest hostile unit within the given attack distance (i.e. distance is ignored if > than ATTACK_DISTANCE), regardless of threat list.
 Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
 {
-    CellCoord p(WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -2085,11 +2085,11 @@ Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
     }
 
     {
-        WoWSource::NearestHostileUnitInAttackDistanceCheck u_check(this, dist);
-        WoWSource::UnitLastSearcher<WoWSource::NearestHostileUnitInAttackDistanceCheck> searcher(this, target, u_check);
+        MoPCore::NearestHostileUnitInAttackDistanceCheck u_check(this, dist);
+        MoPCore::UnitLastSearcher<MoPCore::NearestHostileUnitInAttackDistanceCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<WoWSource::UnitLastSearcher<WoWSource::NearestHostileUnitInAttackDistanceCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<WoWSource::UnitLastSearcher<WoWSource::NearestHostileUnitInAttackDistanceCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<MoPCore::UnitLastSearcher<MoPCore::NearestHostileUnitInAttackDistanceCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<MoPCore::UnitLastSearcher<MoPCore::NearestHostileUnitInAttackDistanceCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, ATTACK_DISTANCE > dist ? ATTACK_DISTANCE : dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, ATTACK_DISTANCE > dist ? ATTACK_DISTANCE : dist);
@@ -2102,8 +2102,8 @@ Player* Creature::SelectNearestPlayer(float distance) const
 {
     Player* target = NULL;
 
-    WoWSource::NearestPlayerInObjectRangeCheck checker(this, distance);
-    WoWSource::PlayerLastSearcher<WoWSource::NearestPlayerInObjectRangeCheck> searcher(this, target, checker);
+    MoPCore::NearestPlayerInObjectRangeCheck checker(this, distance);
+    MoPCore::PlayerLastSearcher<MoPCore::NearestPlayerInObjectRangeCheck> searcher(this, target, checker);
     VisitNearbyObject(distance, searcher);
 
     return target;
@@ -2113,8 +2113,8 @@ Player* Creature::SelectNearestPlayerNotGM(float distance) const
 {
     Player* target = NULL;
 
-    WoWSource::NearestPlayerNotGMInObjectRangeCheck checker(this, distance);
-    WoWSource::PlayerLastSearcher<WoWSource::NearestPlayerNotGMInObjectRangeCheck> searcher(this, target, checker);
+    MoPCore::NearestPlayerNotGMInObjectRangeCheck checker(this, distance);
+    MoPCore::PlayerLastSearcher<MoPCore::NearestPlayerNotGMInObjectRangeCheck> searcher(this, target, checker);
     VisitNearbyObject(distance, searcher);
 
     return target;
@@ -2161,14 +2161,14 @@ void Creature::CallAssistance()
             std::list<Creature*> assistList;
 
             {
-                CellCoord p(WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY()));
+                CellCoord p(MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY()));
                 Cell cell(p);
                 cell.SetNoCreate();
 
-                WoWSource::AnyAssistCreatureInRangeCheck u_check(this, getVictim(), radius);
-                WoWSource::CreatureListSearcher<WoWSource::AnyAssistCreatureInRangeCheck> searcher(this, assistList, u_check);
+                MoPCore::AnyAssistCreatureInRangeCheck u_check(this, getVictim(), radius);
+                MoPCore::CreatureListSearcher<MoPCore::AnyAssistCreatureInRangeCheck> searcher(this, assistList, u_check);
 
-                TypeContainerVisitor<WoWSource::CreatureListSearcher<WoWSource::AnyAssistCreatureInRangeCheck>, GridTypeMapContainer >  grid_creature_searcher(searcher);
+                TypeContainerVisitor<MoPCore::CreatureListSearcher<MoPCore::AnyAssistCreatureInRangeCheck>, GridTypeMapContainer >  grid_creature_searcher(searcher);
 
                 cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
             }
@@ -2193,14 +2193,14 @@ void Creature::CallForHelp(float radius)
     if (radius <= 0.0f || !getVictim() || isPet() || isCharmed())
         return;
 
-    CellCoord p(WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
-    WoWSource::CallOfHelpCreatureInRangeDo u_do(this, getVictim(), radius);
-    WoWSource::CreatureWorker<WoWSource::CallOfHelpCreatureInRangeDo> worker(this, u_do);
+    MoPCore::CallOfHelpCreatureInRangeDo u_do(this, getVictim(), radius);
+    MoPCore::CreatureWorker<MoPCore::CallOfHelpCreatureInRangeDo> worker(this, u_do);
 
-    TypeContainerVisitor<WoWSource::CreatureWorker<WoWSource::CallOfHelpCreatureInRangeDo>, GridTypeMapContainer >  grid_creature_searcher(worker);
+    TypeContainerVisitor<MoPCore::CreatureWorker<MoPCore::CallOfHelpCreatureInRangeDo>, GridTypeMapContainer >  grid_creature_searcher(worker);
 
     cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
 }
@@ -2818,8 +2818,8 @@ Unit* Creature::SelectNearestHostileUnitInAggroRange(bool useLOS) const
     Unit* target = NULL;
 
     {
-        WoWSource::NearestHostileUnitInAggroRangeCheck u_check(this, useLOS);
-        WoWSource::UnitSearcher<WoWSource::NearestHostileUnitInAggroRangeCheck> searcher(this, target, u_check);
+        MoPCore::NearestHostileUnitInAggroRangeCheck u_check(this, useLOS);
+        MoPCore::UnitSearcher<MoPCore::NearestHostileUnitInAggroRangeCheck> searcher(this, target, u_check);
 
         VisitNearbyGridObject(MAX_AGGRO_RADIUS, searcher);
     }

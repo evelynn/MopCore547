@@ -1588,8 +1588,8 @@ public:
             if (Player* l_NearestPlayer = GetCaster()->FindNearestPlayer(300.0f, true))
             {
                 std::list<Player*> l_ListPlayers;
-                WoWSource::AnyPlayerInObjectRangeCheck checker(l_NearestPlayer, 10.0f);
-                WoWSource::PlayerListSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcherBigList(l_NearestPlayer, l_ListPlayers, checker);
+                MoPCore::AnyPlayerInObjectRangeCheck checker(l_NearestPlayer, 10.0f);
+                MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcherBigList(l_NearestPlayer, l_ListPlayers, checker);
                 GetCaster()->VisitNearbyWorldObject(10.0f, searcherBigList);
 
                 if (l_Counter >= 8)

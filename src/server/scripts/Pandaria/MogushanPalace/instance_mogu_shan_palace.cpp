@@ -252,7 +252,7 @@ public:
             {
                 case TYPE_ACTIVATE_ANIMATED_STAFF:
                 {
-                    if (Creature* pCreature = instance->GetCreature(WoWSource::Containers::SelectRandomContainerElement(m_lStaffList)))
+                    if (Creature* pCreature = instance->GetCreature(MoPCore::Containers::SelectRandomContainerElement(m_lStaffList)))
                         if (pCreature->GetAI())
                             pCreature->GetAI()->DoAction(0); //ACTION_ACTIVATE
                     break;

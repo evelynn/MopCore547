@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 WoWSource <http://wowsource.info/>
+ * Copyright (C) 2012-2016 MoPCore <http://MoPCore.info/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1289,7 +1289,7 @@ class mob_minion_of_fear : public CreatureScript
                         return;
                     }
 
-                    targets.sort(WoWSource::HealthPctOrderPred());
+                    targets.sort(MoPCore::HealthPctOrderPred());
 
                     Creature* target = targets.front();
                     if (!target)
@@ -1622,7 +1622,7 @@ class spell_lightning_prison : public SpellScriptLoader
 
             void CorrectRange(std::list<WorldObject*>& targets)
             {
-                WoWSource::Containers::RandomResizeList(targets, GetCaster()->GetMap()->Is25ManRaid() ? 3 : 2);
+                MoPCore::Containers::RandomResizeList(targets, GetCaster()->GetMap()->Is25ManRaid() ? 3 : 2);
             }
 
             void Register()
@@ -1764,7 +1764,7 @@ class spell_cleansing_waters_regen : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                targets.remove_if(WoWSource::UnitAuraCheck(true, SPELL_CLEANSING_WATERS_REGEN));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, SPELL_CLEANSING_WATERS_REGEN));
             }
 
             void Register()

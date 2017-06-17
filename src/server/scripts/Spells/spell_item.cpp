@@ -2386,148 +2386,148 @@ class spell_item_flameseers_staff_flamebreaker : public SpellScriptLoader
 //146193 Endurance of Niuzao
 class spell_item_endurance_of_niuzao : public SpellScriptLoader
 {
-public:
-    spell_item_endurance_of_niuzao() : SpellScriptLoader("spell_item_endurance_of_niuzao") { }
+	public:
+		spell_item_endurance_of_niuzao() : SpellScriptLoader("spell_item_endurance_of_niuzao") { }
 
-    class spell_endurance_of_niuzao_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_endurance_of_niuzao_AuraScript);
+		class spell_endurance_of_niuzao_AuraScript : public AuraScript
+		{
+			PrepareAuraScript(spell_endurance_of_niuzao_AuraScript);
 
-        void CalculateAmount(constAuraEffectPtr aurEff, int32 & amount, bool & canBeRecalculated)
-        {
-            amount = -1;
-        }
+			void CalculateAmount(constAuraEffectPtr aurEff, int32 & amount, bool & canBeRecalculated)
+			{
+				amount = -1;
+			}
 
-        void Absorb(AuraEffectPtr /*aurEff*/, DamageInfo & dmgInfo, uint32 & absorbAmount)
-        {
-            Unit* victim = GetTarget();
-            int32 remainingHealth = victim->GetHealth() - dmgInfo.GetDamage();
-            // If damage kills us
-            if (remainingHealth <= 0 && !victim->HasAura(148010))
-            {
-                absorbAmount = dmgInfo.GetDamage();
-                victim->AddAura(148010, victim);
-            }
-        }
+			void Absorb(AuraEffectPtr /*aurEff*/, DamageInfo & dmgInfo, uint32 & absorbAmount)
+			{
+				Unit* victim = GetTarget();
+				int32 remainingHealth = victim->GetHealth() - dmgInfo.GetDamage();
+				// If damage kills us
+				if (remainingHealth <= 0 && !victim->HasAura(148010))
+				{
+					absorbAmount = dmgInfo.GetDamage();
+					victim->AddAura(148010, victim);
+				}
+			}
 
-        void Register()
-        {
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_endurance_of_niuzao_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
-            OnEffectAbsorb += AuraEffectAbsorbFn(spell_endurance_of_niuzao_AuraScript::Absorb, EFFECT_0);
-        }
-    };
+			void Register()
+			{
+				DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_endurance_of_niuzao_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
+				OnEffectAbsorb += AuraEffectAbsorbFn(spell_endurance_of_niuzao_AuraScript::Absorb, EFFECT_0);
+			}
+		};
 
-    AuraScript* GetAuraScript() const
-    {
-        return new spell_endurance_of_niuzao_AuraScript();
-    }
+		AuraScript* GetAuraScript() const
+		{
+			return new spell_endurance_of_niuzao_AuraScript();
+		}
 };
 
 //146194 Flurry of Xuen
 class spell_item_flurry_of_xuen : public SpellScriptLoader
 {
-public:
-    spell_item_flurry_of_xuen() : SpellScriptLoader("spell_item_flurry_of_xuen") { }
+	public:
+		spell_item_flurry_of_xuen() : SpellScriptLoader("spell_item_flurry_of_xuen") { }
 
-    class spell_item_flurry_of_xuen_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_item_flurry_of_xuen_AuraScript);
+		class spell_item_flurry_of_xuen_AuraScript : public AuraScript
+		{
+			PrepareAuraScript(spell_item_flurry_of_xuen_AuraScript);
 
-        void OnTick0(constAuraEffectPtr aurEff)
-        {
-            PreventDefaultAction();
-            if (Unit* caster = GetCaster())
-            {
-                if (caster->getClass() != CLASS_HUNTER)
-                    caster->CastSpell(caster, 147891, true);
-            }
-        }
+			void OnTick0(constAuraEffectPtr aurEff)
+			{
+				PreventDefaultAction();
+				if (Unit* caster = GetCaster())
+				{
+					if (caster->getClass() != CLASS_HUNTER)
+						caster->CastSpell(caster, 147891, true);
+				}
+			}
 
-        void OnTick1(constAuraEffectPtr aurEff)
-        {
-            PreventDefaultAction();
-            if (Unit* caster = GetCaster())
-            {
-                if (caster->getClass() == CLASS_HUNTER)
-                {
-                    if (Player* player = caster->ToPlayer())
-                    {
-                        if (player->GetSelectedUnit())
-                            caster->CastSpell(player->GetSelectedUnit(), 149276, true);
-                    }
-                }
-            }
-        }
+			void OnTick1(constAuraEffectPtr aurEff)
+			{
+				PreventDefaultAction();
+				if (Unit* caster = GetCaster())
+				{
+					if (caster->getClass() == CLASS_HUNTER)
+					{
+						if (Player* player = caster->ToPlayer())
+						{
+							if (player->GetSelectedUnit())
+								caster->CastSpell(player->GetSelectedUnit(), 149276, true);
+						}
+					}
+				}
+			}
 
-        void Register()
-        {
-            OnEffectPeriodic += AuraEffectPeriodicFn(spell_item_flurry_of_xuen_AuraScript::OnTick0, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
-            OnEffectPeriodic += AuraEffectPeriodicFn(spell_item_flurry_of_xuen_AuraScript::OnTick1, EFFECT_1, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
-        }
-    };
+			void Register()
+			{
+				OnEffectPeriodic += AuraEffectPeriodicFn(spell_item_flurry_of_xuen_AuraScript::OnTick0, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+				OnEffectPeriodic += AuraEffectPeriodicFn(spell_item_flurry_of_xuen_AuraScript::OnTick1, EFFECT_1, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+			}
+		};
 
-    AuraScript* GetAuraScript() const
-    {
-        return new spell_item_flurry_of_xuen_AuraScript();
-    }
+		AuraScript* GetAuraScript() const
+		{
+			return new spell_item_flurry_of_xuen_AuraScript();
+		}
 };
 //146197	Essence of Yu'lon
 class spell_item_essence_of_yulon : public SpellScriptLoader
 {
-public:
-    spell_item_essence_of_yulon() : SpellScriptLoader("spell_item_essence_of_yulon") { }
+	public:
+		spell_item_essence_of_yulon() : SpellScriptLoader("spell_item_essence_of_yulon") { }
 
-    class spell_item_essence_of_yulon_AuraScript : public AuraScript
-    {
-        PrepareAuraScript(spell_item_essence_of_yulon_AuraScript);
+		class spell_item_essence_of_yulon_AuraScript : public AuraScript
+		{
+			PrepareAuraScript(spell_item_essence_of_yulon_AuraScript);
 
-        void OnTick(constAuraEffectPtr aurEff)
-        {
-            PreventDefaultAction();
-            if (Unit* caster = GetCaster())
-            {
-                if (Unit* target = GetTarget())
-                    caster->CastSpell(target, 148008, true);
-            }
-        }
+			void OnTick(constAuraEffectPtr aurEff)
+			{
+				PreventDefaultAction();
+				if (Unit* caster = GetCaster())
+				{
+					if (Unit* target = GetTarget())
+						caster->CastSpell(target, 148008, true);
+				}
+			}
 
-        void Register()
-        {
-            OnEffectPeriodic += AuraEffectPeriodicFn(spell_item_essence_of_yulon_AuraScript::OnTick, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
-        }
-    };
+			void Register()
+			{
+				OnEffectPeriodic += AuraEffectPeriodicFn(spell_item_essence_of_yulon_AuraScript::OnTick, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
+			}
+		};
 
-    AuraScript* GetAuraScript() const
-    {
-        return new spell_item_essence_of_yulon_AuraScript();
-    }
+		AuraScript* GetAuraScript() const
+		{
+			return new spell_item_essence_of_yulon_AuraScript();
+		}
 };
 //148008	Essence of Yu'lon
 class spell_item_essence_of_yulon_dmg : public SpellScriptLoader
 {
-public:
-    spell_item_essence_of_yulon_dmg() : SpellScriptLoader("spell_item_essence_of_yulon_dmg") { }
+	public:
+		spell_item_essence_of_yulon_dmg() : SpellScriptLoader("spell_item_essence_of_yulon_dmg") { }
 
-    class spell_item_essence_of_yulon_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_item_essence_of_yulon_SpellScript)
+		class spell_item_essence_of_yulon_SpellScript : public SpellScript
+		{
+			PrepareSpellScript(spell_item_essence_of_yulon_SpellScript)
 
-        void HandleOnHit()
-        {
-            float damage = float(GetCaster()->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_FROST)) * 0.4f;
-            SetHitDamage(damage);
-        }
+			void HandleOnHit()
+			{
+				float damage = float(GetCaster()->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_FROST)) * 0.4f;
+				SetHitDamage(damage);
+			}
 
-        void Register()
-        {
-            OnHit += SpellHitFn(spell_item_essence_of_yulon_SpellScript::HandleOnHit);
-        }
-    };
+			void Register()
+			{
+				OnHit += SpellHitFn(spell_item_essence_of_yulon_SpellScript::HandleOnHit);
+			}
+		};
 
-    SpellScript* GetSpellScript() const
-    {
-        return new spell_item_essence_of_yulon_SpellScript();
-    }
+		SpellScript* GetSpellScript() const
+		{
+			return new spell_item_essence_of_yulon_SpellScript();
+		}
 };
 
 void AddSC_item_spell_scripts()

@@ -57,8 +57,8 @@ void RandomMovementGenerator<Creature>::_setRandomLocation(Creature* owner)
     destY = respY + distanceY;
 
     // prevent invalid coordinates generation
-    WoWSource::NormalizeMapCoord(destX);
-    WoWSource::NormalizeMapCoord(destY);
+    MoPCore::NormalizeMapCoord(destX);
+    MoPCore::NormalizeMapCoord(destY);
 
     travelDistZ = range; // sin^2 + cos^2 = 1, so travelDistZ = range^2; no need for sqrt below
 

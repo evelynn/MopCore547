@@ -659,7 +659,7 @@ enum UnitFlags2
     UNIT_FLAG2_UNK7                         = 0x00800000,
     UNIT_FLAG2_UNK8                         = 0x01000000,
     UNIT_FLAG2_UNK9                         = 0x02000000,
-    UNIT_FLAG2_UNK10                        = 0x04000000
+    UNIT_FLAG2_CLIENT_CANNOT_TARGET         = 0x04000000,  // Player cannot target the unit, but can use gossips or spellclicks
 };
 
 /// Non Player Character flags
@@ -2505,7 +2505,7 @@ class Unit : public WorldObject
         time_t _lastCombatTime;
 };
 
-namespace WoWSource
+namespace MoPCore
 {
     // Binary predicate for sorting Units based on percent value of a power
     class PowerPctOrderPred

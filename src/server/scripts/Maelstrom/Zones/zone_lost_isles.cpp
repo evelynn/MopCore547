@@ -1207,7 +1207,7 @@ public:
             {
                 std::list<Creature*> temp;
                 SparkSearcher check(t, 100.0f);
-                WoWSource::CreatureListSearcher<SparkSearcher> searcher(t, temp, check);
+                MoPCore::CreatureListSearcher<SparkSearcher> searcher(t, temp, check);
                 t->VisitNearbyGridObject(100.0f, searcher);
                 for (std::list<Creature*>::iterator itr = temp.begin(); itr != temp.end(); ++itr)
                     if ((*itr)->ToTempSummon())
@@ -1349,7 +1349,7 @@ public:
         {
             std::list<Creature*> temp;
             YoungNagaSearcher check(creature, 900.0f);
-            WoWSource::CreatureListSearcher<YoungNagaSearcher> searcher(creature, temp, check);
+            MoPCore::CreatureListSearcher<YoungNagaSearcher> searcher(creature, temp, check);
             creature->VisitNearbyGridObject(900.0f, searcher);
             for (std::list<Creature*>::iterator itr = temp.begin(); itr != temp.end(); ++itr)
                 if ((*itr)->ToTempSummon())

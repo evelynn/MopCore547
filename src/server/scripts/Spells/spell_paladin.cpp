@@ -706,7 +706,7 @@ class spell_pal_emancipate : public SpellScriptLoader
 
                     if (!auraList.empty())
                     {
-                        WoWSource::Containers::RandomResizeList(auraList, 1);
+                        MoPCore::Containers::RandomResizeList(auraList, 1);
                         _player->RemoveAura(*auraList.begin());
                     }
                 }

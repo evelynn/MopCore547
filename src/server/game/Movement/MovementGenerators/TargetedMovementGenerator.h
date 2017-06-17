@@ -38,7 +38,9 @@ template<class T, typename D>
 class TargetedMovementGeneratorMedium : public MovementGeneratorMedium< T, D >, public TargetedMovementGeneratorBase
 {
     protected:
-        TargetedMovementGeneratorMedium(Unit* owner, float offset, float angle) : TargetedMovementGeneratorBase(owner), i_recheckDistance(0), i_offset(offset), i_angle(angle), i_recalculateTravel(false), i_targetReached(false) { }
+        TargetedMovementGeneratorMedium(Unit* owner, float offset, float angle, bool useExactTargetLocation = false) :
+			TargetedMovementGeneratorBase(owner), i_recheckDistance(0), i_offset(offset),
+			i_angle(angle), i_recalculateTravel(false), i_targetReached(false) { }
         ~TargetedMovementGeneratorMedium() { }
 
     public:
@@ -85,8 +87,12 @@ template<class T>
 class FollowMovementGenerator : public TargetedMovementGeneratorMedium<T, FollowMovementGenerator<T> >
 {
     public:
-        FollowMovementGenerator(Unit* owner) : TargetedMovementGeneratorMedium<T, FollowMovementGenerator<T> >(owner){ }
-        FollowMovementGenerator(Unit* owner, float offset, float angle) : TargetedMovementGeneratorMedium<T, FollowMovementGenerator<T> >(owner, offset, angle) { }
+        FollowMovementGenerator(Unit* owner)
+			: TargetedMovementGeneratorMedium<T, FollowMovementGenerator<T> >(owner){ }
+        FollowMovementGenerator(Unit* owner, float offset, float angle)
+			: TargetedMovementGeneratorMedium<T, FollowMovementGenerator<T> >(owner, offset, angle) { }
+		FollowMovementGenerator(Unit* target, float offset, float angle, bool useExactTargetLocation)
+			: TargetedMovementGeneratorMedium<T, FollowMovementGenerator<T> >(target, offset, angle, useExactTargetLocation) { }
         ~FollowMovementGenerator() { }
 
         void DoInitialize(T* owner);

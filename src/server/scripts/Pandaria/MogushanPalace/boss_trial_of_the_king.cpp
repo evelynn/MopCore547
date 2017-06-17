@@ -2025,7 +2025,7 @@ public:
             if (GetCaster())
             {
                 targets.remove_if(CorrectUnitCheck(GetCaster()));
-                targets.sort(WoWSource::ObjectDistanceOrderPred(GetCaster()));
+                targets.sort(MoPCore::ObjectDistanceOrderPred(GetCaster()));
                 targets.resize(3);
             }
         }

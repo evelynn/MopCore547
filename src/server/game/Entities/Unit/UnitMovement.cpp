@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - 2016 WoWSource
+ * Copyright (C) 2012 - 2016 MoPCore
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1183,7 +1183,7 @@ void Unit::SendTeleportPacket(Position& oldPos)
 bool Unit::UpdatePosition(float x, float y, float z, float orientation, bool teleport)
 {
     // prevent crash when a bad coord is sent by the client
-    if (!WoWSource::IsValidMapCoord(x, y, z, orientation))
+    if (!MoPCore::IsValidMapCoord(x, y, z, orientation))
         return false;
 
     bool turn = (GetOrientation() != orientation);

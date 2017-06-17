@@ -1,5 +1,5 @@
 /*
- * Trinity Core and update by WoWSource Forums
+ * Trinity Core and update by MoPCore Forums
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -160,7 +160,6 @@ enum CreatureIds
     
     // Iron Juggernaut
     BOSS_IRON_JUGGERNAUT                = 71466,
-    NPC_CRAWLER_MINE                    = 72050,
 
     // Kor'Kron Dark Shamans
     BOSS_EARTHBREAKER_HAROMM            = 71859,

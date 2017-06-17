@@ -1041,7 +1041,7 @@ void AddSC_boss_horridon();
 void AddSC_boss_tortos();
 void AddSC_boss_council_of_elders();
 void AddSC_boss_megaera();
-void AddSC_boss_darkanimus();
+void AddSC_boss_dark_animus();
 void AddSC_boss_durumu();
 void AddSC_boss_ironqon();
 void AddSC_boss_jikun();
@@ -1945,7 +1945,7 @@ void AddPandariaScripts()
 	AddSC_boss_tortos();
 	AddSC_boss_council_of_elders();
 	AddSC_boss_megaera();
-	AddSC_boss_darkanimus();
+	AddSC_boss_dark_animus();
 	AddSC_boss_durumu();
 	AddSC_boss_ironqon();
 	AddSC_boss_jikun();

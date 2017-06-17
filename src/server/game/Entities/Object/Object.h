@@ -694,9 +694,17 @@ class WorldObject : public Object, public WorldLocation
         void SummonCreatureGroup(uint8 group, std::list<TempSummon*>& list);
 
         Creature*   FindNearestCreature(uint32 entry, float range, bool alive = true) const;
+        std::list<Creature*>   FindNearestCreatures(uint32 entry, float range) const;
+        std::list<Creature*>   FindNearestCreatures(std::list<uint32> entrys, float range) const;
+        std::vector<Creature*> FindNearestCreatures(uint32 entry, float range, bool alive) const;
+        Creature*   FindRandomCreatureInRange(uint32 entry, float range, bool alive);
         GameObject* FindNearestGameObject(uint32 entry, float range) const;
+        std::list<GameObject*> FindNearestGameObjects(uint32 entry, float range) const;
         GameObject* FindNearestGameObjectOfType(GameobjectTypes type, float range) const;
         Player*     FindNearestPlayer(float range, bool alive = true);
+        std::list<Player*> FindNearestPlayers(float range, bool alive = true);
+        Player*     FindRandomPlayerInRange(float range, bool alive = true);
+        bool        IsPlayerInRange(float range);
 
         void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
         void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
@@ -794,7 +802,7 @@ class WorldObject : public Object, public WorldLocation
         uint64 m_explicitSeerGuid;
 };
 
-namespace WoWSource
+namespace MoPCore
 {
     template<class T>
     void RandomResizeList(std::list<T> &_list, uint32 _size)

@@ -1075,19 +1075,19 @@ class spell_jasper_chains : public SpellScriptLoader
                 if (!caster || targets.empty())
                     return;
 
-                targets.remove_if(WoWSource::UnitAuraCheck(true, SPELL_JASPER_CHAINS));
-                targets.remove_if(WoWSource::UnitAuraCheck(true, SPELL_TOTALY_PETRIFIED));
-               // targets.remove_if(WoWSource::UnitAuraCheck(true, SPELL_REND_FLESH)); // dont cast chases on defence player
+                targets.remove_if(MoPCore::UnitAuraCheck(true, SPELL_JASPER_CHAINS));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, SPELL_TOTALY_PETRIFIED));
+               // targets.remove_if(MoPCore::UnitAuraCheck(true, SPELL_REND_FLESH)); // dont cast chases on defence player
 
                 if (targets.size() < 2)
                     return;
 
                 if (!targets.empty())
-                    if (WorldObject* FirstPlayer = WoWSource::Containers::SelectRandomContainerElement(targets))
+                    if (WorldObject* FirstPlayer = MoPCore::Containers::SelectRandomContainerElement(targets))
                     {
                         targets.remove(FirstPlayer);
                         if (!targets.empty())
-                            if (WorldObject* SecondPlayer = WoWSource::Containers::SelectRandomContainerElement(targets))
+                            if (WorldObject* SecondPlayer = MoPCore::Containers::SelectRandomContainerElement(targets))
                             {
                                 if (AuraPtr aura = caster->AddAura(SPELL_JASPER_CHAINS, FirstPlayer->ToUnit()))
                                     aura->SetScriptGuid(0, SecondPlayer->GetGUID());

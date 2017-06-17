@@ -2105,7 +2105,7 @@ public:
         void ResizeTargets(std::list<WorldObject*>& targets)
         {
             if (targets.size() > 1)
-                WoWSource::Containers::RandomResizeList(targets, 1);
+                MoPCore::Containers::RandomResizeList(targets, 1);
         }
 
         void HandleDummy(SpellEffIndex /*effIndex*/)

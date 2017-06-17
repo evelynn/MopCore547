@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 WoWSource <http://wowsource.info/>
+ * Copyright (C) 2012-2016 MoPCore <http://MoPCore.info/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1127,7 +1127,7 @@ public:
             if (Unit* caster = GetCaster())
             {
                 // Melee targets should be low priority
-                targets.sort(WoWSource::ObjectDistanceOrderPred(caster, false));
+                targets.sort(MoPCore::ObjectDistanceOrderPred(caster, false));
 
                 uint32 m_maxTargets = (caster->GetMap()->GetDifficulty() == RAID_DIFFICULTY_25MAN_HEROIC || caster->GetMap()->GetDifficulty() == RAID_DIFFICULTY_25MAN_HEROIC) ? 3 : 1;
 
@@ -1164,7 +1164,7 @@ public:
             if (targets.size() > 1)
             {
                 if (Unit* caster = GetCaster())
-                    targets.sort(WoWSource::ObjectDistanceOrderPred(caster));
+                    targets.sort(MoPCore::ObjectDistanceOrderPred(caster));
 
                 targets.resize(1);
             }

@@ -1031,8 +1031,8 @@ public:
                             if (m_Instance != nullptr)
                             {
                                 UnitList targets;
-                                WoWSource::AnyUnitHavingBuffInObjectRangeCheck u_check(me, me, 100, Spells::SPELL_HELLSCREAMS_WARSONG, true);
-                                WoWSource::UnitListSearcher<WoWSource::AnyUnitHavingBuffInObjectRangeCheck> searcher(me, targets, u_check);
+                                MoPCore::AnyUnitHavingBuffInObjectRangeCheck u_check(me, me, 100, Spells::SPELL_HELLSCREAMS_WARSONG, true);
+                                MoPCore::UnitListSearcher<MoPCore::AnyUnitHavingBuffInObjectRangeCheck> searcher(me, targets, u_check);
                                 me->VisitNearbyObject(100, searcher);
 
                                 for (UnitList::const_iterator it = targets.begin(); it != targets.end(); ++it)

@@ -1,5 +1,5 @@
 /*
- * Trinity Core and update by WoWSource Forums
+ * Trinity Core and update by MoPCore Forums
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -370,7 +370,7 @@ class spell_sha_of_anger_growing_anger : public SpellScriptLoader
 
                 // Maximum 3 targets.
                 if (targets.size() > 3)
-                    WoWSource::RandomResizeList(targets, 3);
+                    MoPCore::RandomResizeList(targets, 3);
             }
 
             void Register()
@@ -483,7 +483,7 @@ class spell_sha_of_anger_unleashed_wrath : public SpellScriptLoader
 
                 // Maximum 10 targets.
                 if (targets.size() > 10)
-                    WoWSource::RandomResizeList(targets, 10);
+                    MoPCore::RandomResizeList(targets, 10);
             }
 
             void Register()

@@ -67,6 +67,8 @@ endif()
 
 include(CheckPlatform)
 
+include(GroupSources)
+
 find_package(PCHSupport)
 find_package(ACE REQUIRED)
 find_package(MySQL REQUIRED)

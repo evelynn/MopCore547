@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - 2016 WoWSource
+ * Copyright (C) 2012 - 2016 MoPCore
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -100,7 +100,7 @@ void Creature::UpdateMovementFlags()
 void Creature::SetPosition(float x, float y, float z, float o)
 {
     // Prevent crash when a bad coord is sent by the client.
-    if (!WoWSource::IsValidMapCoord(x, y, z, o))
+    if (!MoPCore::IsValidMapCoord(x, y, z, o))
     {
         sLog->outDebug(LOG_FILTER_UNITS, "Creature::SetPosition(%f, %f, %f) .. bad coordinates!", x, y, z);
         return;

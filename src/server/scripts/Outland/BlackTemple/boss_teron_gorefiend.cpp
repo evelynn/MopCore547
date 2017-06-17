@@ -180,7 +180,7 @@ public:
                 if (unit && unit->IsAlive())
                     targets.push_back(unit);
             }
-            targets.sort(WoWSource::ObjectDistanceOrderPred(me));
+            targets.sort(MoPCore::ObjectDistanceOrderPred(me));
             Unit* target = targets.front();
             if (target && me->IsWithinDistInMap(target, me->GetAttackDistance(target)))
             {

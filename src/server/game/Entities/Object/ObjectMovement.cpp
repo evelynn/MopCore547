@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2012 - 2016 WoWSource
+* Copyright (C) 2012 - 2016 MoPCore
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU General Public License as published by the
@@ -500,7 +500,7 @@ void Position::MovePosition(Position &pos, float dist, float angle, WorldObject*
     desty = pos.m_positionY + dist * std::sin(angle);
 
     // Prevent invalid coordinates here, position is unchanged.
-    if (!WoWSource::IsValidMapCoord(destx, desty))
+    if (!MoPCore::IsValidMapCoord(destx, desty))
     {
         sLog->outFatal(LOG_FILTER_GENERAL, "Position::MovePosition invalid coordinates X: %f and Y: %f were passed!", destx, desty);
         return;
@@ -531,8 +531,8 @@ void Position::MovePosition(Position &pos, float dist, float angle, WorldObject*
         }
     }
 
-    WoWSource::NormalizeMapCoord(pos.m_positionX);
-    WoWSource::NormalizeMapCoord(pos.m_positionY);
+    MoPCore::NormalizeMapCoord(pos.m_positionX);
+    MoPCore::NormalizeMapCoord(pos.m_positionY);
     object->UpdateGroundPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos.SetOrientation(GetOrientation());
 }
@@ -650,7 +650,7 @@ bool Position::HasInArc(float arc, const Position* obj) const
 
 bool Position::IsPositionValid() const
 {
-    return WoWSource::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
+    return MoPCore::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
 }
 
 // WorldObjects.
@@ -660,8 +660,8 @@ void WorldObject::GetNearPoint2D(float &x, float &y, float distance2d, float abs
     x = GetPositionX() + (GetObjectSize() + distance2d) * std::cos(absAngle);
     y = GetPositionY() + (GetObjectSize() + distance2d) * std::sin(absAngle);
 
-    WoWSource::NormalizeMapCoord(x);
-    WoWSource::NormalizeMapCoord(y);
+    MoPCore::NormalizeMapCoord(x);
+    MoPCore::NormalizeMapCoord(y);
 }
 
 void WorldObject::GetNearPoint(WorldObject const* searcher, float &x, float &y, float &z, float searcher_size, float distance2d, float absAngle) const
@@ -724,8 +724,8 @@ void WorldObject::GetRandomPoint(const Position &pos, float distance, float &ran
     rand_y = pos.m_positionY + new_dist * std::sin(angle);
     rand_z = pos.m_positionZ;
 
-    WoWSource::NormalizeMapCoord(rand_x);
-    WoWSource::NormalizeMapCoord(rand_y);
+    MoPCore::NormalizeMapCoord(rand_x);
+    MoPCore::NormalizeMapCoord(rand_y);
     UpdateGroundPositionZ(rand_x, rand_y, rand_z);            // update to LOS height if available
 }
 
@@ -744,7 +744,7 @@ void WorldObject::MovePosition(Position &pos, float dist, float angle)
     desty = pos.m_positionY + dist * std::sin(angle);
 
     // Prevent invalid coordinates here, position is unchanged
-    if (!WoWSource::IsValidMapCoord(destx, desty))
+    if (!MoPCore::IsValidMapCoord(destx, desty))
     {
         sLog->outFatal(LOG_FILTER_GENERAL, "WorldObject::MovePosition invalid coordinates X: %f and Y: %f were passed!", destx, desty);
         return;
@@ -775,8 +775,8 @@ void WorldObject::MovePosition(Position &pos, float dist, float angle)
         }
     }
 
-    WoWSource::NormalizeMapCoord(pos.m_positionX);
-    WoWSource::NormalizeMapCoord(pos.m_positionY);
+    MoPCore::NormalizeMapCoord(pos.m_positionX);
+    MoPCore::NormalizeMapCoord(pos.m_positionY);
     UpdateGroundPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos.SetOrientation(GetOrientation());
 }
@@ -790,7 +790,7 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
     desty = pos.m_positionY + dist * std::sin(angle);
 
     // Prevent invalid coordinates here, position is unchanged
-    if (!WoWSource::IsValidMapCoord(destx, desty))
+    if (!MoPCore::IsValidMapCoord(destx, desty))
     {
         sLog->outFatal(LOG_FILTER_GENERAL, "WorldObject::MovePositionToFirstCollision invalid coordinates X: %f and Y: %f were passed!", destx, desty);
         return;
@@ -843,8 +843,8 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
         }
     }
 
-    WoWSource::NormalizeMapCoord(pos.m_positionX);
-    WoWSource::NormalizeMapCoord(pos.m_positionY);
+    MoPCore::NormalizeMapCoord(pos.m_positionX);
+    MoPCore::NormalizeMapCoord(pos.m_positionY);
     UpdateAllowedPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos.SetOrientation(GetOrientation());
 }
@@ -862,7 +862,7 @@ void WorldObject::MovePositionToCollisionBetween(Position &pos, float distMin, f
     desty = pos.m_positionY + distMax * std::sin(angle);
 
     // Prevent invalid coordinates here, position is unchanged
-    if (!WoWSource::IsValidMapCoord(destx, desty))
+    if (!MoPCore::IsValidMapCoord(destx, desty))
     {
         sLog->outFatal(LOG_FILTER_GENERAL, "WorldObject::MovePositionToFirstCollision invalid coordinates X: %f and Y: %f were passed!", destx, desty);
         return;
@@ -915,8 +915,8 @@ void WorldObject::MovePositionToCollisionBetween(Position &pos, float distMin, f
         }
     }
 
-    WoWSource::NormalizeMapCoord(pos.m_positionX);
-    WoWSource::NormalizeMapCoord(pos.m_positionY);
+    MoPCore::NormalizeMapCoord(pos.m_positionX);
+    MoPCore::NormalizeMapCoord(pos.m_positionY);
     UpdateAllowedPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos.SetOrientation(GetOrientation());
 }

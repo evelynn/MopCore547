@@ -118,8 +118,8 @@ class spell_sha_totemic_projection : public SpellScriptLoader
 				return;
 			const WorldLocation* summonPos = GetExplTargetDest();
 
-			WoWSource::AnyUnitInObjectRangeCheck check(player, 20.0f);
-			WoWSource::CreatureListSearcher<WoWSource::AnyUnitInObjectRangeCheck> searcher(player, Totem_List, check);
+			MoPCore::AnyUnitInObjectRangeCheck check(player, 20.0f);
+			MoPCore::CreatureListSearcher<MoPCore::AnyUnitInObjectRangeCheck> searcher(player, Totem_List, check);
 
 			player->VisitNearbyObject(20.0f, searcher);
 
@@ -570,11 +570,11 @@ public:
             targets.clear();
             std::list<Unit*> GetTargets;
 
-            WoWSource::AnyGroupedUnitInObjectRangeCheck u_check(GetCaster(), GetCaster(), 40.0f, true);
-            WoWSource::UnitListSearcher<WoWSource::AnyGroupedUnitInObjectRangeCheck> searcher(GetCaster(), GetTargets, u_check);
+            MoPCore::AnyGroupedUnitInObjectRangeCheck u_check(GetCaster(), GetCaster(), 40.0f, true);
+            MoPCore::UnitListSearcher<MoPCore::AnyGroupedUnitInObjectRangeCheck> searcher(GetCaster(), GetTargets, u_check);
             GetCaster()->VisitNearbyObject(40.0f, searcher);
 
-            GetTargets.sort(WoWSource::HealthPctOrderPred());
+            GetTargets.sort(MoPCore::HealthPctOrderPred());
             GetTargets.resize(3);
 
             for (auto itr : GetTargets)
@@ -1010,8 +1010,8 @@ class spell_sha_fire_nova : public SpellScriptLoader
             SpellCastResult HandleCheckCast()
             {
                 UnitList targets;
-                WoWSource::AnyUnitHavingBuffInObjectRangeCheck u_check(GetCaster(), GetCaster(), 100, SPELL_SHA_FLAME_SHOCK, false);
-                WoWSource::UnitListSearcher<WoWSource::AnyUnitHavingBuffInObjectRangeCheck> searcher(GetCaster(), targets, u_check);
+                MoPCore::AnyUnitHavingBuffInObjectRangeCheck u_check(GetCaster(), GetCaster(), 100, SPELL_SHA_FLAME_SHOCK, false);
+                MoPCore::UnitListSearcher<MoPCore::AnyUnitHavingBuffInObjectRangeCheck> searcher(GetCaster(), targets, u_check);
                 GetCaster()->VisitNearbyObject(100, searcher);
                 
                 return targets.size() == 0 ? SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW : SPELL_CAST_OK;
@@ -1343,11 +1343,11 @@ class spell_sha_healing_stream : public SpellScriptLoader
                 targets.clear();
                 std::list<Unit*> GetTargets;
 
-                WoWSource::AnyGroupedUnitInObjectRangeCheck u_check(GetCaster(), GetCaster(), 40.0f, true);
-                WoWSource::UnitListSearcher<WoWSource::AnyGroupedUnitInObjectRangeCheck> searcher(GetCaster(), GetTargets, u_check);
+                MoPCore::AnyGroupedUnitInObjectRangeCheck u_check(GetCaster(), GetCaster(), 40.0f, true);
+                MoPCore::UnitListSearcher<MoPCore::AnyGroupedUnitInObjectRangeCheck> searcher(GetCaster(), GetTargets, u_check);
                 GetCaster()->VisitNearbyObject(40.0f, searcher);
 
-                GetTargets.sort(WoWSource::HealthPctOrderPred());
+                GetTargets.sort(MoPCore::HealthPctOrderPred());
                 int targetsize = 1;
                 if (GetCaster()->HasAura(138303))
                     targetsize = 2;
@@ -1755,9 +1755,9 @@ class spell_sha_bloodlust : public SpellScriptLoader
 
             void RemoveInvalidTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(WoWSource::UnitAuraCheck(true, SHAMAN_SPELL_SATED));
-                targets.remove_if(WoWSource::UnitAuraCheck(true, HUNTER_SPELL_INSANITY));
-                targets.remove_if(WoWSource::UnitAuraCheck(true, MAGE_SPELL_TEMPORAL_DISPLACEMENT));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, SHAMAN_SPELL_SATED));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, HUNTER_SPELL_INSANITY));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, MAGE_SPELL_TEMPORAL_DISPLACEMENT));
             }
 
             void ApplyDebuff()
@@ -1799,9 +1799,9 @@ class spell_sha_heroism : public SpellScriptLoader
 
             void RemoveInvalidTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(WoWSource::UnitAuraCheck(true, SHAMAN_SPELL_EXHAUSTION));
-                targets.remove_if(WoWSource::UnitAuraCheck(true, HUNTER_SPELL_INSANITY));
-                targets.remove_if(WoWSource::UnitAuraCheck(true, MAGE_SPELL_TEMPORAL_DISPLACEMENT));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, SHAMAN_SPELL_EXHAUSTION));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, HUNTER_SPELL_INSANITY));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, MAGE_SPELL_TEMPORAL_DISPLACEMENT));
             }
 
             void ApplyDebuff()

@@ -282,7 +282,7 @@ class spell_pri_psyfiend_hit_me_driver : public SpellScriptLoader
                         return;
 
                     if (psyfiendList.size() > 1)
-                        WoWSource::Containers::RandomResizeList(psyfiendList, 1);
+                        MoPCore::Containers::RandomResizeList(psyfiendList, 1);
 
                     for (auto itr : psyfiendList)
                         if (itr->AI())
@@ -1369,7 +1369,7 @@ class spell_pri_atonement : public SpellScriptLoader
 
                             if (groupList.size() > 1)
                             {
-                                groupList.sort(WoWSource::HealthPctOrderPred());
+                                groupList.sort(MoPCore::HealthPctOrderPred());
                                 groupList.resize(1);
                             }
 
@@ -1855,7 +1855,7 @@ class spell_pri_cascade_second : public SpellScriptLoader
                             return;
 
                         // Each bound hit twice more targets up to 8 for the same bound
-                        WoWSource::Containers::RandomResizeList(targetList, (affectedUnits * 2));
+                        MoPCore::Containers::RandomResizeList(targetList, (affectedUnits * 2));
 
                         for (auto itr : targetList)
                         {
@@ -3013,8 +3013,8 @@ class spell_binding_heal : public SpellScriptLoader
                     if (GetCaster()->HasAura(63248))
                     {
                        std::list<Unit*> targets;
-                       WoWSource::AnyFriendlyUnitInObjectRangeCheck u_check(GetCaster(), GetCaster(), 20.0f);
-                       WoWSource::UnitListSearcher<WoWSource::AnyFriendlyUnitInObjectRangeCheck> searcher(GetCaster(), targets, u_check);
+                       MoPCore::AnyFriendlyUnitInObjectRangeCheck u_check(GetCaster(), GetCaster(), 20.0f);
+                       MoPCore::UnitListSearcher<MoPCore::AnyFriendlyUnitInObjectRangeCheck> searcher(GetCaster(), targets, u_check);
                        GetCaster()->VisitNearbyObject(20, searcher);
 
                        if (!targets.empty())
@@ -3035,7 +3035,7 @@ class spell_binding_heal : public SpellScriptLoader
                            if (targets.empty())
                                return;
                        }
-                        unitList.push_back(WoWSource::Containers::SelectRandomContainerElement(targets));
+                        unitList.push_back(MoPCore::Containers::SelectRandomContainerElement(targets));
                     }
                  }
             }

@@ -1,10 +1,10 @@
-#ifndef WoWSource_GAME_SPELL_CHARGES_TRACKER_H
-#define WoWSource_GAME_SPELL_CHARGES_TRACKER_H
+#ifndef MoPCore_GAME_SPELL_CHARGES_TRACKER_H
+#define MoPCore_GAME_SPELL_CHARGES_TRACKER_H
 
 #include <cstdint>
 #include <unordered_map>
 
-namespace WoWSource
+namespace MoPCore
 {
     class SpellChargesTracker final
     {
@@ -31,6 +31,6 @@ namespace WoWSource
         auto const i = spellChargesMap_.find(spellId);
         return (i != spellChargesMap_.end()) ? i->second.consumedCharges : 0;
     }
-} // namespace WoWSource
+} // namespace MoPCore
 
-#endif // WoWSource_GAME_SPELL_CHARGES_TRACKER_H
+#endif // MoPCore_GAME_SPELL_CHARGES_TRACKER_H

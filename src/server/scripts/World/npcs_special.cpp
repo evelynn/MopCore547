@@ -2041,8 +2041,8 @@ public:
                 return;
 
             std::list<Unit*> targets;
-            WoWSource::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 60);
-            WoWSource::UnitListSearcher<WoWSource::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
+            MoPCore::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 60);
+            MoPCore::UnitListSearcher<MoPCore::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, targets, u_check);
             me->VisitNearbyObject(30, searcher);
             for (std::list<Unit*>::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
             {
@@ -3846,7 +3846,7 @@ class npc_demonic_gateway_purple : public CreatureScript
                 if (greenGates.empty())
                     return;
 
-                greenGates.sort(WoWSource::DistanceCompareOrderPred(me));
+                greenGates.sort(MoPCore::DistanceCompareOrderPred(me));
                 for (auto itr : greenGates)
                 {
                     clicker->CastSpell(clicker, 113942, true);
@@ -3937,7 +3937,7 @@ class npc_demonic_gateway_green : public CreatureScript
                 if (purpleGates.empty())
                     return;
 
-                purpleGates.sort(WoWSource::DistanceCompareOrderPred(me));
+                purpleGates.sort(MoPCore::DistanceCompareOrderPred(me));
                 for (auto itr : purpleGates)
                 {
                     clicker->CastSpell(clicker, 113942, true);
@@ -4888,16 +4888,16 @@ class npc_psyfiend : public CreatureScript
                     std::list<Unit*> targetList;
                     float radius = 20.0f;
 
-                    WoWSource::NearestAttackableUnitInObjectRangeCheck u_check(me, me, radius);
-                    WoWSource::UnitListSearcher<WoWSource::NearestAttackableUnitInObjectRangeCheck> searcher(me, targetList, u_check);
+                    MoPCore::NearestAttackableUnitInObjectRangeCheck u_check(me, me, radius);
+                    MoPCore::UnitListSearcher<MoPCore::NearestAttackableUnitInObjectRangeCheck> searcher(me, targetList, u_check);
 
                     me->VisitNearbyObject(radius, searcher);
 
-                    targetList.remove_if(WoWSource::UnitAuraCheck(true, SPELL_PSYCHIC_HORROR));
+                    targetList.remove_if(MoPCore::UnitAuraCheck(true, SPELL_PSYCHIC_HORROR));
 
                     if (!targetList.empty())
                     {
-                        targetList.sort(WoWSource::ObjectDistanceOrderPred(me));
+                        targetList.sort(MoPCore::ObjectDistanceOrderPred(me));
                         targetList.resize(1);
 
                         for (auto itr : targetList)
@@ -5253,14 +5253,14 @@ class npc_custom_caster_guard : public CreatureScript
                         UnitList targets;
                         DebuffCheck u_check(me, me->GetOwnerGUID());
                         
-                        WoWSource::UnitListSearcher<DebuffCheck> searcher(me, targets, u_check);
+                        MoPCore::UnitListSearcher<DebuffCheck> searcher(me, targets, u_check);
                         me->VisitNearbyObject(100.0f, searcher);
                         if (!targets.empty())
                         {
                             if (targets.size() > 1)
                             {
-                                targets.sort(WoWSource::DistanceOrderPred(me));
-                                WoWSource::Containers::RandomResizeList(targets, 1);
+                                targets.sort(MoPCore::DistanceOrderPred(me));
+                                MoPCore::Containers::RandomResizeList(targets, 1);
                             }
                             Unit* newTarget = *(targets.begin());
                             if (me->getVictim() != newTarget)

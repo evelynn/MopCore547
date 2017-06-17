@@ -155,6 +155,8 @@ if( UNIX AND NOT NOJEM )
   set(worldserver_LINK_FLAGS "-pthread ${worldserver_LINK_FLAGS}")
 endif()
 
+GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
+
 set_target_properties(worldserver PROPERTIES LINK_FLAGS "${worldserver_LINK_FLAGS}")
 
 target_link_libraries(worldserver

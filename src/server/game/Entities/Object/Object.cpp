@@ -1305,7 +1305,7 @@ void Object::ForceValuesUpdateAtIndex(uint32 i)
     }
 }
 
-namespace WoWSource
+namespace MoPCore
 {
     class MonsterChatBuilder
     {
@@ -1346,68 +1346,68 @@ namespace WoWSource
             uint32 i_language;
             uint64 i_targetGUID;
     };
-}                                                           // namespace WoWSource
+}                                                           // namespace MoPCore
 
 void WorldObject::MonsterSay(const char* text, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    WoWSource::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, text, language, TargetGuid);
-    WoWSource::LocalizedPacketDo<WoWSource::MonsterCustomChatBuilder> say_do(say_build);
-    WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-    TypeContainerVisitor<WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    MoPCore::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, text, language, TargetGuid);
+    MoPCore::LocalizedPacketDo<MoPCore::MonsterCustomChatBuilder> say_do(say_build);
+    MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+    TypeContainerVisitor<MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
 }
 
 void WorldObject::MonsterSay(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    WoWSource::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, textId, language, TargetGuid);
-    WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> say_do(say_build);
-    WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
-    TypeContainerVisitor<WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    MoPCore::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_SAY, textId, language, TargetGuid);
+    MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> say_do(say_build);
+    MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+    TypeContainerVisitor<MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
 }
 
 void WorldObject::MonsterYell(const char* text, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    WoWSource::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, text, language, TargetGuid);
-    WoWSource::LocalizedPacketDo<WoWSource::MonsterCustomChatBuilder> say_do(say_build);
-    WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
-    TypeContainerVisitor<WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    MoPCore::MonsterCustomChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, text, language, TargetGuid);
+    MoPCore::LocalizedPacketDo<MoPCore::MonsterCustomChatBuilder> say_do(say_build);
+    MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+    TypeContainerVisitor<MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
 }
 
 void WorldObject::MonsterYell(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    CellCoord p = WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    WoWSource::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
-    WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> say_do(say_build);
-    WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
-    TypeContainerVisitor<WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    MoPCore::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
+    MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> say_do(say_build);
+    MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+    TypeContainerVisitor<MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
 }
 
 void WorldObject::MonsterYellToZone(int32 textId, uint32 language, uint64 TargetGuid)
 {
-    WoWSource::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
-    WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> say_do(say_build);
+    MoPCore::MonsterChatBuilder say_build(*this, CHAT_MSG_MONSTER_YELL, textId, language, TargetGuid);
+    MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> say_do(say_build);
 
     uint32 zoneid = GetZoneId();
 
@@ -1426,15 +1426,15 @@ void WorldObject::MonsterTextEmote(const char* text, uint64 TargetGuid, bool IsB
 
 void WorldObject::MonsterTextEmote(int32 textId, uint64 TargetGuid, bool IsBossEmote)
 {
-    CellCoord p = WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    WoWSource::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
-    WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> say_do(say_build);
-    WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
-    TypeContainerVisitor<WoWSource::PlayerDistWorker<WoWSource::LocalizedPacketDo<WoWSource::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    MoPCore::MonsterChatBuilder say_build(*this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, TargetGuid);
+    MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> say_do(say_build);
+    MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), say_do);
+    TypeContainerVisitor<MoPCore::PlayerDistWorker<MoPCore::LocalizedPacketDo<MoPCore::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE));
 }
 
@@ -1487,13 +1487,13 @@ void WorldObject::SendMessageToSet(WorldPacket* data, bool self)
 
 void WorldObject::SendMessageToSetInRange(WorldPacket* data, float dist, bool /*self*/)
 {
-    WoWSource::MessageDistDeliverer notifier(this, data, dist);
+    MoPCore::MessageDistDeliverer notifier(this, data, dist);
     VisitNearbyWorldObject(dist, notifier);
 }
 
 void WorldObject::SendMessageToSet(WorldPacket* data, Player const* skipped_rcvr)
 {
-    WoWSource::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
+    MoPCore::MessageDistDeliverer notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
 }
 
@@ -2039,26 +2039,75 @@ void WorldObject::SummonCreatureGroup(uint8 group, std::list<TempSummon*>& list)
 Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive) const
 {
     Creature* creature = NULL;
-    WoWSource::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
-    WoWSource::CreatureLastSearcher<WoWSource::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
+    MoPCore::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
+    MoPCore::CreatureLastSearcher<MoPCore::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
     VisitNearbyObject(range, searcher);
     return creature;
+}
+
+std::list<Creature*> WorldObject::FindNearestCreatures(uint32 entry, float range) const
+{
+    std::list<Creature*> creatureList;    
+    GetCreatureListWithEntryInGrid(creatureList, entry, range);   
+    return creatureList;
+}
+
+std::list<Creature*> WorldObject::FindNearestCreatures(std::list<uint32> entrys, float range) const
+{
+    std::list<Creature*> creatureList;
+    for (std::list<uint32>::iterator itr = entrys.begin(); itr != entrys.end(); ++itr)
+        GetCreatureListWithEntryInGrid(creatureList, (*itr), range);
+    return creatureList;
+}
+
+std::vector<Creature*> WorldObject::FindNearestCreatures(uint32 entry, float range, bool alive) const
+{
+    std::list<Creature*> creatureList;
+    std::vector<Creature*> returnList;
+    GetCreatureListWithEntryInGrid(creatureList, entry, range);
+    
+    for (std::list<Creature*>::iterator itr = creatureList.begin(); itr != creatureList.end(); ++itr)
+    {
+        if ((*itr)->IsAlive() == alive)
+            returnList.push_back(*itr);
+    }
+    return returnList;
+}
+
+Creature* WorldObject::FindRandomCreatureInRange(uint32 entry, float range, bool alive)
+{
+    Creature* creature = nullptr;
+    std::list<Creature*> cList = FindNearestCreatures(entry, range);
+    if (cList.empty())
+        return NULL;
+
+    uint32 rol = urand(0, cList.size() - 1);
+    std::list<Creature*>::const_iterator itr = cList.begin();
+    std::advance(itr, rol);
+    return *itr;
 }
 
 GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range) const
 {
     GameObject* go = NULL;
-    WoWSource::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
-    WoWSource::GameObjectLastSearcher<WoWSource::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
+    MoPCore::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
+    MoPCore::GameObjectLastSearcher<MoPCore::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
     VisitNearbyGridObject(range, searcher);
     return go;
+}
+
+std::list<GameObject*> WorldObject::FindNearestGameObjects(uint32 entry, float range) const
+{
+    std::list<GameObject*> goList;
+    GetGameObjectListWithEntryInGrid(goList, entry, range);
+    return goList;
 }
 
 GameObject* WorldObject::FindNearestGameObjectOfType(GameobjectTypes type, float range) const
 { 
     GameObject* go = NULL;
-    WoWSource::NearestGameObjectTypeInObjectRangeCheck checker(*this, type, range);
-    WoWSource::GameObjectLastSearcher<WoWSource::NearestGameObjectTypeInObjectRangeCheck> searcher(this, go, checker);
+    MoPCore::NearestGameObjectTypeInObjectRangeCheck checker(*this, type, range);
+    MoPCore::GameObjectLastSearcher<MoPCore::NearestGameObjectTypeInObjectRangeCheck> searcher(this, go, checker);
     VisitNearbyGridObject(range, searcher);
     return go;
 }
@@ -2066,42 +2115,72 @@ GameObject* WorldObject::FindNearestGameObjectOfType(GameobjectTypes type, float
 Player* WorldObject::FindNearestPlayer(float range, bool alive)
 {
     Player* player = NULL;
-    WoWSource::AnyPlayerInObjectRangeCheck check(this, range);
-    WoWSource::PlayerSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcher(this, player, check);
+    MoPCore::AnyPlayerInObjectRangeCheck check(this, range);
+    MoPCore::PlayerSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(this, player, check);
     VisitNearbyWorldObject(range, searcher);
     return player;
 }
 
+std::list<Player*> WorldObject::FindNearestPlayers(float range, bool alive)
+{
+    std::list<Player*> PlayerList; 
+    MoPCore::AnyPlayerInObjectRangeCheck checker(this, range, alive);
+    MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(this, PlayerList, checker);
+    VisitNearbyWorldObject(range, searcher);
+    return PlayerList;
+}
+
+Player* WorldObject::FindRandomPlayerInRange(float range, bool alive)
+{
+    Player* player = nullptr;
+    std::list<Player*> pList = FindNearestPlayers(range, alive);
+    if (pList.empty())
+        return NULL;
+
+    uint32 rol = urand(0, pList.size() - 1);
+    std::list<Player*>::const_iterator itr = pList.begin();
+    std::advance(itr, rol);
+    return *itr;
+}
+
+bool WorldObject::IsPlayerInRange(float range)
+{
+    if (Player* player = FindNearestPlayer(range, true))
+        return true;
+
+    return false;
+}
+
 void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& gameobjectList, uint32 entry, float maxSearchRange) const
 {
-    CellCoord pair(WoWSource::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
+    CellCoord pair(MoPCore::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    WoWSource::AllGameObjectsWithEntryInRange check(this, entry, maxSearchRange);
-    WoWSource::GameObjectListSearcher<WoWSource::AllGameObjectsWithEntryInRange> searcher(this, gameobjectList, check);
-    TypeContainerVisitor<WoWSource::GameObjectListSearcher<WoWSource::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
+    MoPCore::AllGameObjectsWithEntryInRange check(this, entry, maxSearchRange);
+    MoPCore::GameObjectListSearcher<MoPCore::AllGameObjectsWithEntryInRange> searcher(this, gameobjectList, check);
+    TypeContainerVisitor<MoPCore::GameObjectListSearcher<MoPCore::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(this->GetMap()), *this, maxSearchRange);
 }
 
 void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& creatureList, uint32 entry, float maxSearchRange) const
 {
-    CellCoord pair(WoWSource::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
+    CellCoord pair(MoPCore::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    WoWSource::AllCreaturesOfEntryInRange check(this, entry, maxSearchRange);
-    WoWSource::CreatureListSearcher<WoWSource::AllCreaturesOfEntryInRange> searcher(this, creatureList, check);
-    TypeContainerVisitor<WoWSource::CreatureListSearcher<WoWSource::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
+    MoPCore::AllCreaturesOfEntryInRange check(this, entry, maxSearchRange);
+    MoPCore::CreatureListSearcher<MoPCore::AllCreaturesOfEntryInRange> searcher(this, creatureList, check);
+    TypeContainerVisitor<MoPCore::CreatureListSearcher<MoPCore::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(this->GetMap()), *this, maxSearchRange);
 }
 
 void WorldObject::GetPlayerListInGrid(std::list<Player*>& playerList, float maxSearchRange) const
 {    
-    WoWSource::AnyPlayerInObjectRangeCheck checker(this, maxSearchRange);
-    WoWSource::PlayerListSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcher(this, playerList, checker);
+    MoPCore::AnyPlayerInObjectRangeCheck checker(this, maxSearchRange);
+    MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(this, playerList, checker);
     this->VisitNearbyWorldObject(maxSearchRange, searcher);
 }
 
@@ -2215,8 +2294,8 @@ void WorldObject::DestroyForNearbyPlayers()
         return;
 
     std::list<Player*> targets;
-    WoWSource::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange(), false);
-    WoWSource::PlayerListSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
+    MoPCore::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange(), false);
+    MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
     VisitNearbyWorldObject(GetVisibilityRange(), searcher);
     for (std::list<Player*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
     {
@@ -2239,7 +2318,7 @@ void WorldObject::DestroyForNearbyPlayers()
 void WorldObject::UpdateObjectVisibility(bool /*forced*/)
 {
     //updates object's visibility for nearby players
-    WoWSource::VisibleChangesNotifier notifier(*this);
+    MoPCore::VisibleChangesNotifier notifier(*this);
     VisitNearbyWorldObject(GetVisibilityRange(), notifier);
 }
 
@@ -2315,7 +2394,7 @@ struct WorldObjectChangeAccumulator
 
 void WorldObject::BuildUpdate(UpdateDataMapType& data_map)
 {
-    CellCoord p = WoWSource::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = MoPCore::ComputeCellCoord(GetPositionX(), GetPositionY());
     Cell cell(p);
     cell.SetNoCreate();
     WorldObjectChangeAccumulator notifier(*this, data_map);

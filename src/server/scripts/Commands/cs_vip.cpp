@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2015 WoWSource
+* Copyright (C) 2015 MoPCore
 */
 
 #include "ScriptMgr.h"

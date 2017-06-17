@@ -556,8 +556,8 @@ public:
 
                         std::list<Player*> players;
 
-                        WoWSource::AnyPlayerInObjectRangeCheck checker(me, 35.0f);
-                        WoWSource::PlayerListSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+                        MoPCore::AnyPlayerInObjectRangeCheck checker(me, 35.0f);
+                        MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
                         me->VisitNearbyWorldObject(35.0f, searcher);
 
                         for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)

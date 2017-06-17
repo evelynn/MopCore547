@@ -480,7 +480,7 @@ class boss_sinestra : public CreatureScript
                             if (targetList.size() < 2)
                                 return;
 
-                            WoWSource::RandomResizeList<Unit*>(targetList, 2);
+                            MoPCore::RandomResizeList<Unit*>(targetList, 2);
 
                             std::list<Unit*>::const_iterator iter = targetList.begin();
                             pOrb1 = me->SummonCreature(NPC_SHADOW_ORB, (*iter)->GetPositionX(), (*iter)->GetPositionY(), (*iter)->GetPositionZ(), (*iter)->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 14000);
@@ -1142,10 +1142,10 @@ class spell_sinestra_wrack : public SpellScriptLoader
                     return;
 
                 std::list<Player*> targets;
-                WoWSource::AnyPlayerInObjectRangeCheck checker(GetTarget(), 100.0f, true);
-                WoWSource::PlayerListSearcher<WoWSource::AnyPlayerInObjectRangeCheck> searcher(GetTarget(), targets, checker); 
+                MoPCore::AnyPlayerInObjectRangeCheck checker(GetTarget(), 100.0f, true);
+                MoPCore::PlayerListSearcher<MoPCore::AnyPlayerInObjectRangeCheck> searcher(GetTarget(), targets, checker); 
                 GetTarget()->VisitNearbyWorldObject(100.0f, searcher);
-                targets.sort(WoWSource::ObjectDistanceOrderPred(GetTarget()));
+                targets.sort(MoPCore::ObjectDistanceOrderPred(GetTarget()));
                 uint8 count = 0;
                 if (!targets.empty())
                     for (std::list<Player*>::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)

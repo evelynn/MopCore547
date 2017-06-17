@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 WoWSource <http://wowsource.info/>
+ * Copyright (C) 2012-2016 MoPCore <http://MoPCore.info/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -529,7 +529,7 @@ class boss_lei_shi : public CreatureScript
                     std::list<Creature*> protectors;
                     me->GetCreatureListWithEntryInGrid(protectors, NPC_ANIMATED_PROTECTOR, 100.0f);
 
-                    protectors.remove_if(WoWSource::UnitAuraCheck(true, SPELL_PROTECT_RESPAWN));
+                    protectors.remove_if(MoPCore::UnitAuraCheck(true, SPELL_PROTECT_RESPAWN));
 
                     for (auto itr : protectors)
                     {

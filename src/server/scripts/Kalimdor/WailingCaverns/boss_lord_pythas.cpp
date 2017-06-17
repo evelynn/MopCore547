@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 WoWSource [WoWSC] <http://www.wowsource.info/>
+ * Copyright (C) 2015 MoPCore [WoWSC] <http://www.MoPCore.info/>
  *
  * In Cooperation with
  *

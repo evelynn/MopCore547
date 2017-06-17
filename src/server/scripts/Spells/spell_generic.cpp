@@ -197,8 +197,8 @@ class spell_gen_cannibalize : public SpellScriptLoader
                 float max_range = GetSpellInfo()->GetMaxRange(false);
                 WorldObject* result = NULL;
                 // search for nearby enemy corpse in range
-                WoWSource::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
-                WoWSource::WorldObjectSearcher<WoWSource::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
+                MoPCore::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
+                MoPCore::WorldObjectSearcher<MoPCore::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
                 caster->GetMap()->VisitFirstFound(caster->m_positionX, caster->m_positionY, max_range, searcher);
                 if (!result)
                     return SPELL_FAILED_NO_EDIBLE_CORPSES;
@@ -3797,8 +3797,8 @@ class spell_gen_jade_tempest : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 std::list<Unit*> TargetList;
-                WoWSource::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
-                WoWSource::UnitListSearcher<WoWSource::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
+                MoPCore::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
+                MoPCore::UnitListSearcher<MoPCore::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
                 GetCaster()->VisitNearbyObject(100.0f, searcher);
                 for (std::list<Unit*>::iterator itr = TargetList.begin(); itr != TargetList.end(); ++itr)
                 {
@@ -3835,8 +3835,8 @@ class spell_gen_molten_fist : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 std::list<Unit*> TargetList;
-                WoWSource::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
-                WoWSource::UnitListSearcher<WoWSource::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
+                MoPCore::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
+                MoPCore::UnitListSearcher<MoPCore::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
                 GetCaster()->VisitNearbyObject(100.0f, searcher);
                 for (std::list<Unit*>::iterator itr = TargetList.begin(); itr != TargetList.end(); ++itr)
                 {
@@ -3873,8 +3873,8 @@ class spell_gen_return_to_stone : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 std::list<Unit*> TargetList;
-                WoWSource::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
-                WoWSource::UnitListSearcher<WoWSource::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
+                MoPCore::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
+                MoPCore::UnitListSearcher<MoPCore::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
                 GetCaster()->VisitNearbyObject(100.0f, searcher);
                 for (std::list<Unit*>::iterator itr = TargetList.begin(); itr != TargetList.end(); ++itr)
                 {
@@ -3911,8 +3911,8 @@ class spell_gen_shadow_volley : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 std::list<Unit*> TargetList;
-                WoWSource::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
-                WoWSource::UnitListSearcher<WoWSource::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
+                MoPCore::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
+                MoPCore::UnitListSearcher<MoPCore::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
                 GetCaster()->VisitNearbyObject(100.0f, searcher);
                 for (std::list<Unit*>::iterator itr = TargetList.begin(); itr != TargetList.end(); ++itr)
                 {
@@ -3949,8 +3949,8 @@ class spell_gen_fracture : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 std::list<Unit*> TargetList;
-                WoWSource::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
-                WoWSource::UnitListSearcher<WoWSource::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
+                MoPCore::AnyUnfriendlyUnitInObjectRangeCheck checker(GetCaster(), GetCaster(), 100.0f);
+                MoPCore::UnitListSearcher<MoPCore::AnyUnfriendlyUnitInObjectRangeCheck> searcher(GetCaster(), TargetList, checker);
                 GetCaster()->VisitNearbyObject(100.0f, searcher);
                 for (std::list<Unit*>::iterator itr = TargetList.begin(); itr != TargetList.end(); ++itr)
                 {

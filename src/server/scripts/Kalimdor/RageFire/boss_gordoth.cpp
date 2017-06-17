@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 WoWSource [WoWSC] <http://www.wowsource.info/>
+ * Copyright (C) 2015 MoPCore [WoWSC] <http://www.MoPCore.info/>
  *
  * This SourceCode is NOT free a software. Please hold everything Private
  * and read our Terms

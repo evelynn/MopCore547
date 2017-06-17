@@ -278,7 +278,7 @@ class boss_yu_lon : public CreatureScript
                         _targets.remove_if(PlayerCheck());
 
                         if (!_targets.empty())
-                            if (auto target = WoWSource::Containers::SelectRandomContainerElement(_targets))
+                            if (auto target = MoPCore::Containers::SelectRandomContainerElement(_targets))
                                 if (target->GetTypeId() == TYPEID_PLAYER)
                                     me->CastSpell(target, SPELL_JADEFIRE_BLAZE_BOLT, true);
                         break;

@@ -662,7 +662,7 @@ class npc_gilneas_city_guard_gate  : public CreatureScript
                                     me->GetCreatureListWithEntryInGrid(citizens, 44086, 35.0f);
 
                                     if (!citizens.empty())
-                                        if (Creature* citizen = WoWSource::Containers::SelectRandomContainerElement(citizens))
+                                        if (Creature* citizen = MoPCore::Containers::SelectRandomContainerElement(citizens))
                                             if (citizen->IsAIEnabled)
                                                 citizen->AI()->Talk(CITIZEN_RANDOM_TEXT);
 
@@ -3913,15 +3913,15 @@ class npc_horrid_abomination  : public CreatureScript
                             playerGUID = caster->GetGUID();
                             Talk(ABOMINATION_TEXT_ID);
 
-                            //CellCoord pair(WoWSource::ComputeCellCoord(LiamPosition[0], LiamPosition[1]));
+                            //CellCoord pair(MoPCore::ComputeCellCoord(LiamPosition[0], LiamPosition[1]));
                             //Cell cell(pair);
                             //cell.SetNoCreate();
 
                             Creature* creature = NULL;
                             CreatureEntryCheck checker(NPC_PRINCE_LIAM_GREYMANE);
-                            WoWSource::CreatureSearcher<CreatureEntryCheck> searcher(me, creature, checker);
+                            MoPCore::CreatureSearcher<CreatureEntryCheck> searcher(me, creature, checker);
 
-                            //cell.Visit(pair, WoWSource::makeGridVisitor(searcher), *me->GetMap(), 5.f, LiamPosition[0], LiamPosition[1]);
+                            //cell.Visit(pair, MoPCore::makeGridVisitor(searcher), *me->GetMap(), 5.f, LiamPosition[0], LiamPosition[1]);
 
                             me->SetReactState(REACT_PASSIVE);
                             me->AttackStop();
@@ -5866,7 +5866,7 @@ class npc_stagecoach_harness_escort  : public CreatureScript
 
                                 if (!ogreList.empty())
                                 {
-                                    if (Creature* ogre = WoWSource::Containers::SelectRandomContainerElement(ogreList))
+                                    if (Creature* ogre = MoPCore::Containers::SelectRandomContainerElement(ogreList))
                                     {
                                         float x, y, z;
                                         me->GetPosition(x, y, z);
@@ -8023,8 +8023,8 @@ class npc_krennan_aranas_tbfgc  : public CreatureScript
 //                float _y = y + std::sin(angle + pathangle) * dist;
 //                float _z = z;
 //
-//                WoWSource::NormalizeMapCoord(_x);
-//                WoWSource::NormalizeMapCoord(_y);
+//                MoPCore::NormalizeMapCoord(_x);
+//                MoPCore::NormalizeMapCoord(_y);
 //
 //                militia->UpdateGroundPositionZ(_x, _y, _z);
 //

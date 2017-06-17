@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - 2016 WoWSource
+ * Copyright (C) 2012 - 2016 MoPCore
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1451,7 +1451,7 @@ class spell_yeasty_alemental_ferment : public SpellScriptLoader
 
                         if (!playerTargetsList.empty()) // If the list is not empty select only the nearest player in line with the boss.
                         {
-                            playerTargetsList.sort(WoWSource::ObjectDistanceOrderPred(caster));
+                            playerTargetsList.sort(MoPCore::ObjectDistanceOrderPred(caster));
                             playerTargetsList.resize(1);
                             caster->CastSpell(playerTargetsList.front(), SPELL_FERMENT_HEAL, true);
                         }

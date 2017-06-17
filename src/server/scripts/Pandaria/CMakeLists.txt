@@ -90,7 +90,7 @@ set(scripts_STAT_SRCS
   Pandaria/ThroneOfThunder/boss_tortos.cpp
   Pandaria/ThroneOfThunder/boss_council_of_elders.cpp
   Pandaria/ThroneOfThunder/boss_megaera.cpp
-  Pandaria/ThroneOfThunder/boss_darkanimus.cpp
+  Pandaria/ThroneOfThunder/boss_dark_animus.cpp
   Pandaria/ThroneOfThunder/boss_durumu.cpp
   Pandaria/ThroneOfThunder/boss_ironqon.cpp
   Pandaria/ThroneOfThunder/boss_jikun.cpp
@@ -102,7 +102,6 @@ set(scripts_STAT_SRCS
   Pandaria/SiegeOfOrgrimmar/instance_siege_of_orgrimmar.cpp
   Pandaria/SiegeOfOrgrimmar/siege_of_orgrimmar.cpp
   Pandaria/SiegeOfOrgrimmar/siege_of_orgrimmar.h
-  Pandaria/SiegeOfOrgrimmar/npc_lorewalker_cho.cpp
   Pandaria/SiegeOfOrgrimmar/boss_immerseus.cpp
   Pandaria/SiegeOfOrgrimmar/boss_fallen_protectors.cpp
   Pandaria/SiegeOfOrgrimmar/boss_norushen.cpp

@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by WoWSource.rc
+// Used by MoPCore.rc
 //
 
 // Next default values for new objects

@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2012 - 2016 WoWSource http://wowsource.info/
+* Copyright (C) 2012 - 2016 MoPCore http://MoPCore.info/
 */
 
 #include "ScriptPCH.h"

@@ -254,8 +254,8 @@ class spell_mage_glyph_of_slow : public SpellScriptLoader
                         float radius = 50.0f;
                         bool found = false;
 
-                        WoWSource::NearestAttackableUnitInObjectRangeCheck u_check(caster, caster, radius);
-                        WoWSource::UnitListSearcher<WoWSource::NearestAttackableUnitInObjectRangeCheck> searcher(caster, targetList, u_check);
+                        MoPCore::NearestAttackableUnitInObjectRangeCheck u_check(caster, caster, radius);
+                        MoPCore::UnitListSearcher<MoPCore::NearestAttackableUnitInObjectRangeCheck> searcher(caster, targetList, u_check);
                         caster->VisitNearbyObject(radius, searcher);
 
                         for (auto itr : targetList)
@@ -721,7 +721,7 @@ class spell_mage_arcane_barrage : public SpellScriptLoader
                             target->GetAttackableUnitListInRange(targetList, 10.0f);
                             targetList.remove_if(CheckArcaneBarrageImpactPredicate(_player, target));
 
-                            WoWSource::Containers::RandomResizeList(targetList, chargeCount);
+                            MoPCore::Containers::RandomResizeList(targetList, chargeCount);
 
                             for (auto itr : targetList)
                                 target->CastCustomSpell(itr, SPELL_MAGE_ARCANE_BARRAGE_TRIGGERED, &bp, NULL, NULL, true, 0, NULLAURA_EFFECT, _player->GetGUID());
@@ -947,7 +947,7 @@ class spell_mage_nether_tempest : public SpellScriptLoader
                         GetTarget()->GetAttackableUnitListInRange(targetList, 10.0f);
                         targetList.remove_if(CheckNetherImpactPredicate(_player, GetTarget()));
 
-                        WoWSource::Containers::RandomResizeList(targetList, 1);
+                        MoPCore::Containers::RandomResizeList(targetList, 1);
 
                         for (auto itr : targetList)
                         {
@@ -1204,7 +1204,7 @@ class spell_mage_inferno_blast : public SpellScriptLoader
                         uint32 targets = _player->HasAura(SPELL_MAGE_GLYPH_OF_INFERNO_BLAST) ? 4 : 3;
 
                         if (targetList.size() > targets)
-                            WoWSource::Containers::RandomResizeList(targetList, targets);
+                            MoPCore::Containers::RandomResizeList(targetList, targets);
 
                         for (auto itr : targetList)
                         {
@@ -1408,10 +1408,10 @@ class spell_mage_time_warp : public SpellScriptLoader
 
             void RemoveInvalidTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(WoWSource::UnitAuraCheck(true, HUNTER_SPELL_INSANITY));
-                targets.remove_if(WoWSource::UnitAuraCheck(true, SPELL_SHAMAN_EXHAUSTED));
-                targets.remove_if(WoWSource::UnitAuraCheck(true, SPELL_SHAMAN_SATED));
-                targets.remove_if(WoWSource::UnitAuraCheck(true, SPELL_MAGE_TEMPORAL_DISPLACEMENT));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, HUNTER_SPELL_INSANITY));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, SPELL_SHAMAN_EXHAUSTED));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, SPELL_SHAMAN_SATED));
+                targets.remove_if(MoPCore::UnitAuraCheck(true, SPELL_MAGE_TEMPORAL_DISPLACEMENT));
             }
 
             void ApplyDebuff()
@@ -2033,7 +2033,7 @@ class spell_mage_illusion_effect : public SpellScriptLoader
                 if (targets.empty())
                     return;
                 
-                target = WoWSource::Containers::SelectRandomContainerElement(targets)->ToUnit();
+                target = MoPCore::Containers::SelectRandomContainerElement(targets)->ToUnit();
             }
 
             void HandleScriptEffect(SpellEffIndex effIndex)

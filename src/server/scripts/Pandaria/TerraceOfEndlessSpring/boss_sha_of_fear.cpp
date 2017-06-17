@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 WoWSource <http://wowsource.info/>
+ * Copyright (C) 2012-2016 MoPCore <http://MoPCore.info/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -972,7 +972,7 @@ class spell_champion_of_light : public SpellScriptLoader
                 }
 
                 if (!targets.empty())
-                    WoWSource::Containers::RandomResizeList(targets, 1);
+                    MoPCore::Containers::RandomResizeList(targets, 1);
             }
 
             void Register()
@@ -1106,7 +1106,7 @@ class spell_penetrating_bolt : public SpellScriptLoader
                 targetGuid = 0;
 
                 if (!targets.empty())
-                    WoWSource::Containers::RandomResizeList(targets, 1);
+                    MoPCore::Containers::RandomResizeList(targets, 1);
 
                 for (auto itr : targets)
                     if (itr->GetGUID())
